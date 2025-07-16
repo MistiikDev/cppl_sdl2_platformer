@@ -13,8 +13,8 @@ class Vec2f {
         }
 
         // Vector 2 basic vector accessers
-        Vec2f Unit(Vec2f& vector) {
-            return Vec2f(vector.x / vector.Magnitude(), vector.y / vector.Magnitude());
+        Vec2f Unit() {
+            return Vec2f(this->x / this->Magnitude(), this->y / this->Magnitude());
         }
 
         double Magnitude() {
