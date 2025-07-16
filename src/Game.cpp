@@ -24,7 +24,7 @@ void Game::Start(SDL_WindowFlags windowFlag) {
     this->window = activeWindow;
 
     // Create the rendering box, and start rendering to the screen
-    this->AppRenderer = new WindowRenderer { this->window, SDL_RENDERER_ACCELERATED  };
+    this->AppRenderer = new WindowRenderer { this->window, SDL_RENDERER_ACCELERATED };
     this->inputManager = new InputManager();
 
     // Hardcoded textures to display
@@ -56,8 +56,13 @@ void Game::Run() {
 }
 
 void Game::Stop() {
-    std::cout << "Quitting Game.." << '\n';
+    std::cout << "Destroying deps:" << '\n';
 
+    this->AppRenderer->Quit();
+    this->inputManager->Quit();
+    
     SDL_DestroyWindow(this->window);
+
+    std::cout << "Quitting game...";
     SDL_Quit();
 }

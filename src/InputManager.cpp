@@ -30,10 +30,6 @@ void InputManager::UnbindAction(const char* ActionName) {
 void InputManager::Listen(SDL_Event& event) {
     if (!b_isListening) { return; }
 
-    if (event.type == SDL_QUIT) {
-        this->Quit();
-    }
-
     Sint32 keyCode = -1;
     Uint8 inputState = 0;
 
@@ -76,7 +72,7 @@ void InputManager::Listen(SDL_Event& event) {
 }
 
 void InputManager::Quit() {
-    std::cout << "Quitting input listener." << std::endl;
+    std::cout << "Destroying INPUT LISTENER." << std::endl;
 
     this->b_isListening = false;
 }

@@ -17,6 +17,8 @@ class WindowRenderer{
         void Display();
         void Render();
         void ClearViewport();
+
+        void Quit();
     private:
         SDL_Renderer* activeRenderer;
 };
