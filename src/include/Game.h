@@ -20,6 +20,8 @@ class InputManager;
 struct EntityMetaData {
     Vec2f position;
     const char* textureLoc;
+
+    bool b_isPlayer;
 };
 
 class Game {
@@ -41,10 +43,15 @@ class Game {
             h = HEIGTH;
         }
 
+
+        Vec2f midScreen { WIDTH / 2, HEIGTH / 2 };
+
         std::vector<EntityMetaData> demoMap =
         {
-            EntityMetaData {Vec2f(0, 0), "src/art/background/day_background.png"},
+            EntityMetaData {Vec2f(0, 0), "src/art/background/day_background.png", false},
+            EntityMetaData {midScreen, "src/art/sprites/player_sprite_sized.png", true}
         };
+
     private:
         int windowWidth = WIDTH;
         int windowHeigth = HEIGTH;

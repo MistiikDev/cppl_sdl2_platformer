@@ -28,14 +28,16 @@ void Game::Start(SDL_WindowFlags windowFlag) {
     this->AppRenderer = new WindowRenderer { this->window, SDL_RENDERER_ACCELERATED };
     this->inputManager = new InputManager();
 
-    // Hardcoded textures to display
+    // Hardcoded entities to display
     for (EntityMetaData eMD : demoMap) {
-        this->AppRenderer->entityManager->CreateEntity(this, eMD.position, eMD.textureLoc);
+        if (eMD.b_isPlayer) {
+            this->AppRenderer->entityManager->CreatePlayer(this, eMD.position, eMD.textureLoc); 
+        } 
+        else {
+            this->AppRenderer->entityManager->CreateEntity(this, eMD.position, eMD.textureLoc); 
+        }
     }
 
-    Vec2f midScreen { WIDTH / 2, HEIGTH / 2 };
-
-    this->AppRenderer->entityManager->CreatePlayer(this, midScreen, "src/art/sprites/player_sprite_sized.png");
     this->AppRenderer->entityManager->AwakeEntities();
 
     //
