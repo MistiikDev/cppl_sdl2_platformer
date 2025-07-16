@@ -1,10 +1,9 @@
 #include "InputManager.h"
 
-InputManager::InputManager() {
-    this->b_isListening = true;
-}
+SIGNAL<Sint32, Uint8> InputManager::UserInput("User Input");
+SIGNAL<Vec2f&> InputManager::MouseMoveEvent("Mouse Movement");
 
-void InputManager::BindAction(const char* ActionName, Sint32 keyCode, ActionCallback callback) {
+void InputManager::BindAction(std::string& ActionName, Sint32 keyCode, ActionCallback callback) {
     if (callback == NULL) {
         std::cerr << "ERROR: Binded action : " << ActionName << " without any callback!" << std::endl;
         
@@ -16,7 +15,7 @@ void InputManager::BindAction(const char* ActionName, Sint32 keyCode, ActionCall
     this->actions.push_back(action);
 }
 
-void InputManager::UnbindAction(const char* ActionName) {
+void InputManager::UnbindAction(std::string& ActionName) {
     auto iterator = std::find_if(this->actions.begin(), this->actions.end(), [ActionName](const Action& action){
         return action.ActionName == ActionName;
     });
@@ -49,17 +48,19 @@ void InputManager::Listen(SDL_Event& event) {
         keyCode = event.button.button;
         inputState = SDL_PRESSED;
 
-        // Template for futur event signal manager;
-        int x = event.motion.x;
-        int y = event.motion.y;
+        int x = 3; // Some X Value;
+        int y = 4; // Some Y Value;
 
         Vec2f MouseHover { static_cast<float>(x), static_cast<float>(y) };
 
-        this->MouseMoveEvent.Invoke(MouseHover);
+        InputManager::MouseMoveEvent.Invoke(MouseHover);
     }
 
     if (b_isInputValid) {
-        for (const Action& action : this->actions) {
+
+        InputManager::UserInput.Invoke(keyCode, inputState);
+        
+        for (Action& action : this->actions) {
             if (action.keycode == keyCode) {
                 if (action.callBack) {
                     action.callBack(action.ActionName, inputState);

@@ -1,6 +1,4 @@
-#include <iostream>
 #include "WindowRenderer.h"
-#include "Entity.h"
 
 WindowRenderer::WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag) {
     this->activeRenderer = SDL_CreateRenderer(window, -1, renderFlag |  SDL_RENDERER_PRESENTVSYNC);

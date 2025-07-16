@@ -5,12 +5,21 @@
 
 class Player : public Entity {
     public:
-        Player(SDL_Texture* playerTexture) : Entity(Vec2f(100, 400), playerTexture), Score(0) {
+        Player(Game* CurrentGameInstance, Vec2f& startPosition, SDL_Texture* texture) : Entity(CurrentGameInstance, startPosition, texture) {};
+
+        ~Player() {
             
         }
 
+        virtual void Awake();
+        virtual void Update(float deltaTime);
+
+        void GetUserInput(Sint32 keyCode, Uint8 inputState);
     private:
-        int Score;
+        bool isJumping;
+        float walkSpeed = 100.0f;
+
+        std::unordered_map<Sint32, bool> player_keyStates;
 };
 
 #endif
