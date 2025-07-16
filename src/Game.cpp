@@ -24,7 +24,8 @@ void Game::Start(SDL_WindowFlags windowFlag) {
     this->window = activeWindow;
 
     // Create the rendering box, and start rendering to the screen
-    this->AppRenderer = new WindowRenderer { this->window, SDL_RENDERER_ACCELERATED };
+    this->AppRenderer = new WindowRenderer { this->window, SDL_RENDERER_ACCELERATED  };
+    this->inputManager = new InputManager();
 
     // Hardcoded textures to display
     for (EntityMetaData eMD : demoMap) {
@@ -38,6 +39,8 @@ void Game::Start(SDL_WindowFlags windowFlag) {
 void Game::Run() {
     while (this->running) {
         while (SDL_PollEvent(&this->AppEventPoll)) {
+            this->inputManager->Listen(this->AppEventPoll);
+
             if (this->AppEventPoll.type == SDL_QUIT) {
                 this->running = false;
                 this->Stop();

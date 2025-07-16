@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define WIDTH 1920
-#define HEIGTH 1080
+#define WIDTH 1280
+#define HEIGTH 720
 
 #include <iostream>
 #include <vector>
@@ -11,6 +11,7 @@
 
 #include "WindowRenderer.h"
 #include "Entity.h"
+#include "InputManager.h"
 
 struct EntityMetaData {
     Vec2f position;
@@ -40,8 +41,9 @@ class Game {
 
         SDL_Window* window;
         SDL_Event AppEventPoll;
-
         WindowRenderer* AppRenderer;
+
+        InputManager* inputManager;
 };
 
 #endif

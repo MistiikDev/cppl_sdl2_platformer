@@ -3,7 +3,7 @@
 #include "Entity.h"
 
 WindowRenderer::WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag) {
-    this->activeRenderer = SDL_CreateRenderer(window, -1, renderFlag);
+    this->activeRenderer = SDL_CreateRenderer(window, -1, renderFlag |  SDL_RENDERER_PRESENTVSYNC);
     this->entityManager = new EntityManager(this->activeRenderer);
 }
 
@@ -12,7 +12,7 @@ void WindowRenderer::Display() {
 }
 
 void WindowRenderer::Render() {
-    for (Entity* e : this->entityManager->GetActiveEntities()) {
+    for (Entity* e : (this->entityManager->GetActiveEntities())) {
         SDL_Rect sourceRect, destRect;
         // Source, what pixels are we drawing?
         sourceRect.x = e->GetEntityRenderingBox().x;

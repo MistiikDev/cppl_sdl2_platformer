@@ -9,9 +9,9 @@ class EntityManager {
         
         void CreateEntity(Vec2f& position, const char* textureFilePath);
 
-        std::vector<Entity*> GetActiveEntities() { return activeEntities; };
+        std::vector<Entity*>& GetActiveEntities() { return activeEntities; };
     
-        private:
+    private:
         std::vector<Entity*> activeEntities; // Textures to be rendered;
         SDL_Renderer* activeRenderer;
 };

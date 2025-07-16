@@ -16,6 +16,8 @@ class Entity {
             entityBox.y = 0;
         };
 
+        void SetPosition(Vec2f& position) { this->position = position; }
+
         Vec2f& GetPosition() { return position; };
         SDL_Rect& GetEntityRenderingBox() { return entityBox; };
         SDL_Texture* GetTexture() { return entityTexture; };
