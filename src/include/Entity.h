@@ -34,11 +34,17 @@ class Entity {
 
         bool Anchored;
         bool CanCollide;
+        
+        bool isPushing = false;
+        bool isJumping = false;
+        bool isGrounded = false;
 
         std::string Name;
 
         virtual void Awake() {};
-        virtual void Update(float deltaTime) {};
+        virtual void Update(float deltaTime);
+
+        void Push(Vec2f& push_vector, float speed = 0.1f);
 
         void SetPosition(Vec2f& position);
         void SetVelocity(const Vec2f& velocity) { this->Velocity = velocity; }; 
@@ -50,9 +56,17 @@ class Entity {
         Vec2f& GetVelocity() { return Velocity ;};
         Vec2f& GetAcceleration() { return Acceleration; };
 
+        Vec2f GetSize() {
+            return Vec2f {
+                (double)this->GetEntityRenderingBox().w,
+                (double)this->GetEntityRenderingBox().h
+            };
+        }
+
         SDL_Rect& GetEntityRenderingBox() { return entityBox; };
         SDL_Texture* GetTexture() { return entityTexture; };
     private:
+
         double Mass;
 
         Vec2f Position;

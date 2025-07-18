@@ -9,16 +9,20 @@ class Player : public Entity {
             this->Name = "Player";
             this->Anchored = false; // Set by default for now
             this->CanCollide = true;
+
+            startPos = startPosition;
         };
+
+        Vec2f startPos;
 
         ~Player() { };
 
-        virtual void Awake();
-        virtual void Update(float deltaTime);
+        void Awake();
+        void Update(float deltaTime);
+        void Jump();
 
         void GetUserInput(Sint32 keyCode, Uint8 inputState);
     private:
-        bool isJumping;
         float walkSpeed = 100.0f;
 
         std::unordered_map<Sint32, bool> player_keyStates;

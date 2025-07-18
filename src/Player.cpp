@@ -14,18 +14,29 @@ void Player::Awake() {
     });
 }
 
+void Player::Jump() {
+    if (!isGrounded) return;
+
+    isJumping = true;
+
+    Vec2f jumpImpulse = Vec2f {0, -300};  // Negative Y to go up
+    this->SetVelocity(jumpImpulse);
+}
+
 void Player::Update(float deltaTime) {
-    // Vec2f direction(0, 0);
-    // Vec2f currentPlayerPosition = this->GetPosition();
+    Vec2f direction(0, 0);
+    Vec2f currentPlayerPosition = this->GetPosition();
 
-    // if (this->player_keyStates[SDLK_q]) direction.x -= 1;
-    // if (this->player_keyStates[SDLK_d]) direction.x += 1;
+    if (this->player_keyStates[SDLK_q]) direction.x -= 1;
+    if (this->player_keyStates[SDLK_d]) direction.x += 1;
 
-    // Vec2f unit_direction = direction.Unit();
-    // Vec2f proc_velocity = unit_direction * this->walkSpeed;
+    if (this->player_keyStates[SDLK_SPACE]) this->Jump();
 
-    // Vec2f currentVelocity = this->GetVelocity();
-    // currentVelocity.x = proc_velocity.x;
+    Vec2f unit_direction = direction.Unit();
+    Vec2f proc_velocity = unit_direction * this->walkSpeed;
 
-    // this->SetVelocity(currentVelocity);
+    Vec2f currentVelocity = this->GetVelocity();
+    currentVelocity.x = proc_velocity.x;
+
+    this->SetVelocity(currentVelocity);
 }

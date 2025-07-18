@@ -9,6 +9,8 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include <chrono>
+#include <thread>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -47,7 +49,7 @@ class Game {
         }
 
         Vec2f MidScreenLoc { WIDTH / 2, HEIGTH / 2 };
-        Vec2f GroundScreenLoc = MidScreenLoc - Vec2f {500, 0};
+        Vec2f GroundScreenLoc = MidScreenLoc - Vec2f {300, -160};
 
         float DeltaTime = 0.0f;
     private:

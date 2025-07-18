@@ -48,16 +48,16 @@ void EntityManager::AwakeEntities() {
     }
 }
 
-void EntityManager::UpdateEntities(float deltaTime) {
+void EntityManager::UpdateEntities(float deltaTime) {    
     for (Entity* e : this->activeEntities) {
-
         if (!e->Anchored) {
-            Physics::UpdatePositionInWorld(e, deltaTime);
+            Physics::UpdatePositionInWorld(e, deltaTime); // Gravity work..
         }
 
-        Physics::CheckEntityCollisions(this->activeEntities);
         e->Update(deltaTime);
     }
+    
+    Physics::CheckEntityCollisions(this->activeEntities);
 }
 
 void EntityManager::ClearEntities() {

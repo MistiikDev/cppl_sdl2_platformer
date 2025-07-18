@@ -30,7 +30,7 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
 
     Entity* Background = this->AppRenderer->entityManager->CreateEntity(this, Vec2f::zero, "src/art/background/day_background.png", 10000); 
     Entity* Ground = this->AppRenderer->entityManager->CreateEntity(this, GroundScreenLoc, "src/art/background/soil.jpg", 10000); 
-    Player* Player = this->AppRenderer->entityManager->CreatePlayer(this, MidScreenLoc, "src/art/sprites/player_sprite_sized.png", 60);
+    Player* Player = this->AppRenderer->entityManager->CreatePlayer(this, MidScreenLoc + Vec2f {0, -100}, "src/art/sprites/player_sprite_sized.png", 60);
 
     Background->CanCollide = false;
     Background->Anchored = true;
