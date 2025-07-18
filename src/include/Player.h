@@ -5,11 +5,13 @@
 
 class Player : public Entity {
     public:
-        Player(Game* CurrentGameInstance, Vec2f& startPosition, SDL_Texture* texture) : Entity(CurrentGameInstance, startPosition, texture) {};
+        Player(Game* CurrentGameInstance, const Vec2f& startPosition, SDL_Texture* texture, double Mass) : Entity(CurrentGameInstance, startPosition, texture, Mass) {
+            this->Name = "Player";
+            this->Anchored = false; // Set by default for now
+            this->CanCollide = true;
+        };
 
-        ~Player() {
-            
-        }
+        ~Player() { };
 
         virtual void Awake();
         virtual void Update(float deltaTime);

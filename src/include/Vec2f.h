@@ -10,6 +10,10 @@
 
 class Vec2f {
     public:
+
+        static const Vec2f zero;
+        static const Vec2f one;
+
         Vec2f() : x(0.0), y(0.0) {}
         Vec2f(double x, double y): x(x), y(y) {};    
 
@@ -41,36 +45,19 @@ class Vec2f {
         // }
         
         // Vector 2 operation overloading.
-        Vec2f operator+(const Vec2f rhs) const {
-            return Vec2f(this->x + rhs.x, this->y + rhs.y);
-        }
-
-        Vec2f operator-(const Vec2f rhs) const {
-            return Vec2f(this->x - rhs.x, this->y - rhs.y);
-        }
+        Vec2f operator+(const Vec2f rhs) const { return Vec2f(this->x + rhs.x, this->y + rhs.y); }
+        Vec2f operator-(const Vec2f rhs) const { return Vec2f(this->x - rhs.x, this->y - rhs.y); }
 
         // Scalar and vector product
-        Vec2f operator*(const double scalar) const {
-            return Vec2f(this->x * scalar, this->y * scalar);
-        }
-
-        Vec2f operator*(const Vec2f rhs) const {
-            return Vec2f(this->x * rhs.x, this->y * rhs.y);
-        }
+        Vec2f operator*(const double scalar) const { return Vec2f(this->x * scalar, this->y * scalar); }
+        Vec2f operator*(const Vec2f rhs) const { return Vec2f(this->x * rhs.x, this->y * rhs.y); }
 
         // Scalar and cector division
-        Vec2f operator/(const double scalar) const {
-            return Vec2f(this->x / scalar, this->y / scalar);
-        }
-
-        Vec2f operator/(const Vec2f rhs) const {
-            return Vec2f(this->x / rhs.x, this->y / rhs.y);
-        }
+        Vec2f operator/(const double scalar) const { return Vec2f(this->x / scalar, this->y / scalar); }
+        Vec2f operator/(const Vec2f rhs) const { return Vec2f(this->x / rhs.x, this->y / rhs.y); }
 
         // Equality
-        bool operator==(const Vec2f& rhs) const {
-            return x == rhs.x && y == rhs.y;
-        }
+        bool operator==(const Vec2f& rhs) const { return x == rhs.x && y == rhs.y; }
 
         double x, y;
 };

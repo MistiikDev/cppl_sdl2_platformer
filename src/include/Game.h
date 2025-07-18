@@ -4,38 +4,41 @@
 
 #define WIDTH 1280
 #define HEIGTH 720
-
-#define GRAVITY 9.81
+#define GRAVITY 450
 
 #include <iostream>
 #include <vector>
+#include <cassert>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 class WindowRenderer;
 class InputManager;
+class PhysicsRenderer;
 
 #include "Vec2f.h"
 
-struct EntityMetaData {
-    Vec2f position;
-    const char* textureLoc;
+class Player;
+class Entity;
 
-    bool b_isPlayer;
+struct EntityMetaData {
+    const Vec2f position;
+    const char* textureLoc;
+    const bool b_isPlayer;
+
+    double mass;
 };
 
 class Game {
     public: 
         Game( const char* GameTitle ): WindowTitle(GameTitle) {};
-        ~Game() {
-
-        }
+        ~Game() {};
         
-        bool running = false;
-        double deltaTime = 0.0f;
+        bool Running = false;
         const char* WindowTitle;
 
-        void Start( SDL_WindowFlags windowFlag = SDL_WINDOW_MOUSE_FOCUS );   
+        void Start( const SDL_WindowFlags windowFlag = SDL_WINDOW_ALLOW_HIGHDPI );   
         void Stop();
         
         void GetWindowSize(int &w, int& h) { 
@@ -43,26 +46,21 @@ class Game {
             h = HEIGTH;
         }
 
+        Vec2f MidScreenLoc { WIDTH / 2, HEIGTH / 2 };
+        Vec2f GroundScreenLoc = MidScreenLoc - Vec2f {500, 0};
 
-        Vec2f midScreen { WIDTH / 2, HEIGTH / 2 };
-
-        std::vector<EntityMetaData> demoMap =
-        {
-            EntityMetaData {Vec2f(0, 0), "src/art/background/day_background.png", false},
-            EntityMetaData {midScreen, "src/art/sprites/player_sprite_sized.png", true}
-        };
-
+        float DeltaTime = 0.0f;
     private:
-        int windowWidth = WIDTH;
-        int windowHeigth = HEIGTH;
+        const int WindowWeigth = WIDTH;
+        const int WindowHeigth = HEIGTH;
 
         void Run();
 
-        SDL_Window* window;
+        SDL_Window* Window;
         SDL_Event AppEventPoll;
-        WindowRenderer* AppRenderer;
 
-        InputManager* inputManager;
+        WindowRenderer* AppRenderer;
+        InputManager* _InputManager;
 };
 
 #endif

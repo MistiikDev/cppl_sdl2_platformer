@@ -1,10 +1,6 @@
 #include "Game.h"
 #include "Entity.h"
 
-void Entity::AddVelocity(Vec2f& velocity) {
-    this->Velocity = this->Velocity + velocity;
-} 
-
 void Entity::SetPosition(Vec2f& newposition) {
     int w = this->entityBox.w;
     int h = this->entityBox.h;
@@ -16,9 +12,5 @@ void Entity::SetPosition(Vec2f& newposition) {
     newposition.x = std::max(0.0, std::min((double)(screen_w - w), newposition.x));
     newposition.y = std::max(0.0, std::min((double)(screen_h - h), newposition.y));
 
-    this->position = newposition;
-}
-
-double Entity::GetDeltaTime() {
-    return this->CurrentGameInstance->deltaTime;
+    this->Position = newposition;
 }

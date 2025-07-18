@@ -13,36 +13,51 @@
 class Game;
 class Entity {
     public:
-        Entity(Game* CurrentGameInstance, Vec2f& startPosition, SDL_Texture* texture): CurrentGameInstance(CurrentGameInstance), position(startPosition), entityTexture(texture) {
+        Entity(Game* CurrentGameInstance, const Vec2f& startPosition, SDL_Texture* texture, double Mass) : 
+            CurrentGameInstance(CurrentGameInstance), Position(startPosition), entityTexture(texture), Mass(Mass) 
+        {
             SDL_QueryTexture(texture, NULL, NULL, &entityBox.w, &entityBox.h);
+
+            this->Name = "Generic Entity";
+            
+            this->Anchored = true; // Set by default for now
+            this->CanCollide = true;
+            
+            this->Velocity = Vec2f {0, 0};
+            this->Acceleration = Vec2f {0, 0};
 
             entityBox.x = 0;
             entityBox.y = 0;
         };
 
-        ~Entity() {
-            
-        }
+        ~Entity() { }
+
+        bool Anchored;
+        bool CanCollide;
+
+        std::string Name;
 
         virtual void Awake() {};
         virtual void Update(float deltaTime) {};
 
         void SetPosition(Vec2f& position);
-        void AddVelocity(Vec2f& velocity);
+        void SetVelocity(const Vec2f& velocity) { this->Velocity = velocity; }; 
+        void SetAcceleration(const Vec2f& acceleration) {this->Acceleration = acceleration; };
 
-        double GetDeltaTime();
+        double GetMass() { return Mass; };
 
-
-        Vec2f& GetPosition() { return position; };
+        Vec2f& GetPosition() { return Position; };
         Vec2f& GetVelocity() { return Velocity ;};
+        Vec2f& GetAcceleration() { return Acceleration; };
 
         SDL_Rect& GetEntityRenderingBox() { return entityBox; };
         SDL_Texture* GetTexture() { return entityTexture; };
-
     private:
-        Vec2f position;
-        Vec2f Velocity;
+        double Mass;
 
+        Vec2f Position;
+        Vec2f Velocity;
+        Vec2f Acceleration;
 
         SDL_Rect entityBox;
         SDL_Texture* entityTexture;

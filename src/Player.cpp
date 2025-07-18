@@ -15,19 +15,17 @@ void Player::Awake() {
 }
 
 void Player::Update(float deltaTime) {
-    Vec2f direction(0, 0);
-    Vec2f currentPlayerPosition = this->GetPosition();
+    // Vec2f direction(0, 0);
+    // Vec2f currentPlayerPosition = this->GetPosition();
 
-    if (this->player_keyStates[SDLK_z]) direction.y -= 1;
-    if (this->player_keyStates[SDLK_s]) direction.y += 1;
-    if (this->player_keyStates[SDLK_q]) direction.x -= 1;
-    if (this->player_keyStates[SDLK_d]) direction.x += 1;
+    // if (this->player_keyStates[SDLK_q]) direction.x -= 1;
+    // if (this->player_keyStates[SDLK_d]) direction.x += 1;
 
-    Vec2f unit_direction = direction.Unit();
-    Vec2f proc_velocity = unit_direction * this->walkSpeed;
+    // Vec2f unit_direction = direction.Unit();
+    // Vec2f proc_velocity = unit_direction * this->walkSpeed;
 
-    Vec2f finalPosition = currentPlayerPosition + (proc_velocity * this->GetDeltaTime());
+    // Vec2f currentVelocity = this->GetVelocity();
+    // currentVelocity.x = proc_velocity.x;
 
-    // Update texture rendering;
-    this->SetPosition(finalPosition);
+    // this->SetVelocity(currentVelocity);
 }

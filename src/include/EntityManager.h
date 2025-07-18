@@ -11,8 +11,8 @@ class EntityManager {
     public:
         EntityManager(SDL_Renderer* activeRenderer): activeRenderer(activeRenderer) {};
         
-        void CreateEntity(Game* currentGameInstance, Vec2f& position, const char* textureFilePath);
-        void CreatePlayer(Game* currentGameInstance, Vec2f& position, const char* textureFilePath);
+        Entity* CreateEntity(Game* currentGameInstance, const Vec2f& position, const char* textureFilePath, double Mass);
+        Player* CreatePlayer(Game* currentGameInstance, const Vec2f& position, const char* textureFilePath, double Mass);
 
         void AwakeEntities();
         void UpdateEntities(float deltaTime);
