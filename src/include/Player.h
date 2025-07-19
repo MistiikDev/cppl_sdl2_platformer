@@ -11,6 +11,16 @@ class Player : public Entity {
 
         ~Player() { };
 
+        bool isWalking() { 
+            return this->isGrounded && 
+
+            this->GetVelocity().Magnitude() > 1 && 
+
+            !this->isJumping && 
+
+            (player_keyStates[SDLK_q] || player_keyStates[SDLK_d]);
+        };
+
         void Awake();
         void Update(float deltaTime);
         void Jump();
