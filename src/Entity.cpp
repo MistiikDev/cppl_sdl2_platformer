@@ -16,11 +16,7 @@ void Entity::SetPosition(Vec2f& newposition) {
 }
 
 void Entity::Update(float deltaTime) {
-    // if (this->isGrounded) {
-    //     // Cancel any y velocity;
-    //     this->SetVelocity(Vec2f { this->GetVelocity().x, 0 });  // Zero vertical velocity
-    //     this->SetAcceleration(Vec2f { this->GetAcceleration().x, 0 });
-    // }
+
 } 
 
 void Entity::Push(Vec2f& push_vector, float speed) {
@@ -35,11 +31,6 @@ void Entity::Push(Vec2f& push_vector, float speed) {
         Vec2f lerpedPosition = startPosition.Lerp(targetPosition, t);
 
         this->SetPosition(lerpedPosition);
-
-        // uncomment to crash :) 
-
-        // std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(1000 / speed)));
-        // wait in parallel for '1/Speed'
     }
 
     this->isPushing = false;

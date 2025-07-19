@@ -14,13 +14,13 @@ SDL_Texture* EntityManager::LoadTexture(const char* textureFilePath) {
     return texture;
 }
 
-Entity* EntityManager::CreateEntity(Game* currentGameInstance, const Vec2f &start_position, const char* textureFilePath, double Mass) {
-    SDL_Texture *texture = this->LoadTexture(textureFilePath);
+Entity* EntityManager::CreateEntity(Game* currentGameInstance, EntityData& entityData) {
+    SDL_Texture *texture = this->LoadTexture(entityData.TexturePath.c_str());
+
     Entity* e = new Entity { 
         currentGameInstance, 
-        start_position, 
-        texture, 
-        Mass
+        entityData, 
+        texture
     };
 
     activeEntities.push_back(e);
@@ -28,13 +28,13 @@ Entity* EntityManager::CreateEntity(Game* currentGameInstance, const Vec2f &star
     return e;
 };
 
-Player* EntityManager::CreatePlayer(Game* currentGameInstance, const Vec2f &start_position, const char* textureFilePath, double Mass) {
-    SDL_Texture *texture = this->LoadTexture(textureFilePath);
+Player* EntityManager::CreatePlayer(Game* currentGameInstance, EntityData& entityData) {
+    SDL_Texture *texture = this->LoadTexture(entityData.TexturePath.c_str());
+    
     Player* p = new Player { 
         currentGameInstance, 
-        start_position, 
-        texture, 
-        Mass
+        entityData, 
+        texture
     };
 
     activeEntities.push_back(p);

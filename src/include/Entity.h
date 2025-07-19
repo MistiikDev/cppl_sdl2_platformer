@@ -9,25 +9,32 @@
 
 #include "Vec2f.h"
 #include "InputManager.h"
+#include "EntityData.h"
 
 class Game;
 class Entity {
     public:
-        Entity(Game* CurrentGameInstance, const Vec2f& startPosition, SDL_Texture* texture, double Mass) : 
-            CurrentGameInstance(CurrentGameInstance), Position(startPosition), entityTexture(texture), Mass(Mass) 
-        {
-            SDL_QueryTexture(texture, NULL, NULL, &entityBox.w, &entityBox.h);
+        Entity(Game* CurrentGameInstance, EntityData& entityData, SDL_Texture* EntityTexture) : CurrentGameInstance(CurrentGameInstance) {
+            this->Name = entityData.Name;
 
-            this->Name = "Generic Entity";
+            this->Anchored = entityData.Anchored;
+            this->CanCollide = entityData.CanCollide;
             
-            this->Anchored = true; // Set by default for now
-            this->CanCollide = true;
-            
+            this->Position = entityData.Position; // Start Position;
             this->Velocity = Vec2f {0, 0};
             this->Acceleration = Vec2f {0, 0};
 
+            this->Mass = entityData.Mass;
+
             entityBox.x = 0;
             entityBox.y = 0;
+
+            this->entityTexture = EntityTexture;
+
+            this->RenderingGroup = entityData.RenderingGroup;
+            this->RenderingLayer = entityData.RenderingLayer;
+
+            SDL_QueryTexture(this->entityTexture, NULL, NULL, &entityBox.w, &entityBox.h);
         };
 
         ~Entity() { }
@@ -40,6 +47,9 @@ class Entity {
         bool isGrounded = false;
 
         std::string Name;
+        std::string RenderingGroup;
+
+        int RenderingLayer;
 
         virtual void Awake() {};
         virtual void Update(float deltaTime);
@@ -66,7 +76,6 @@ class Entity {
         SDL_Rect& GetEntityRenderingBox() { return entityBox; };
         SDL_Texture* GetTexture() { return entityTexture; };
     private:
-
         double Mass;
 
         Vec2f Position;

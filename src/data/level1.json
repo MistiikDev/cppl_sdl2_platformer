@@ -1,0 +1,35 @@
+{
+    "Name": "Level 1",
+    "Version": 1,
+    "Data": {
+        "Entities": [
+
+            {
+                "Name": "Day Background",
+                "Class": "Entity",
+                "Position": [0, 0],
+                "Mass": 1000,
+
+                "Anchored": true,
+                "CanCollide": false,
+                "TexturePath": "src/art/background/day_background.png",
+                "RenderingGroup" : "",
+                "RenderLayer": -1
+            }, 
+
+            {
+                "Name": "Player1",
+                "Class": "Player",
+                "Position": [640, 360],
+                "Mass": 100,
+
+                "Anchored": false,
+                "CanCollide": true,
+                "TexturePath": "src/art/sprites/player_sprite_sized.png",
+
+                "RenderingGroup" : "",
+                "RenderLayer": 1
+            }
+        ]
+    }
+}

@@ -6,10 +6,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include "Entity.h"
 #include "EntityManager.h"
 
-class WindowRenderer{
+class Entity;
+class WindowRenderer {
     public:
         WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag);
 

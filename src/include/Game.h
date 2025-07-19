@@ -15,22 +15,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "Vec2f.h"
+
 class WindowRenderer;
 class InputManager;
 class PhysicsRenderer;
-
-#include "Vec2f.h"
-
-class Player;
-class Entity;
-
-struct EntityMetaData {
-    const Vec2f position;
-    const char* textureLoc;
-    const bool b_isPlayer;
-
-    double mass;
-};
+class LevelManager;
 
 class Game {
     public: 
@@ -42,7 +32,6 @@ class Game {
 
         void Start( const SDL_WindowFlags windowFlag = SDL_WINDOW_ALLOW_HIGHDPI );   
         void Stop();
-        
         void GetWindowSize(int &w, int& h) { 
             w = WIDTH;
             h = HEIGTH;
@@ -50,6 +39,10 @@ class Game {
 
         Vec2f MidScreenLoc { WIDTH / 2, HEIGTH / 2 };
         Vec2f GroundScreenLoc = MidScreenLoc - Vec2f {300, -160};
+
+        WindowRenderer* AppRenderer;
+        InputManager* _InputManager;
+        LevelManager* levelManager;
 
         float DeltaTime = 0.0f;
     private:
@@ -60,9 +53,6 @@ class Game {
 
         SDL_Window* Window;
         SDL_Event AppEventPoll;
-
-        WindowRenderer* AppRenderer;
-        InputManager* _InputManager;
 };
 
 #endif

@@ -1,3 +1,4 @@
+#include "Entity.h"
 #include "WindowRenderer.h"
 
 WindowRenderer::WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag) {
@@ -10,7 +11,16 @@ void WindowRenderer::Display() {
 }
 
 void WindowRenderer::Render() {
-    for (Entity* e : (this->entityManager->GetActiveEntities())) {
+    std::vector<Entity*> activeEntities = this->entityManager->GetActiveEntities();
+
+    // Sort list based off of render layers.
+    std::sort(activeEntities.begin(), activeEntities.end(), 
+        [](Entity* a, Entity* b) { 
+            return a->RenderingLayer < b->RenderingLayer; 
+        }
+    );
+
+    for (Entity* e : activeEntities) {
         SDL_Rect sourceRect, destRect;
         // Source, what pixels are we drawing?
         sourceRect.x = e->GetEntityRenderingBox().x;

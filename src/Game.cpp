@@ -1,7 +1,8 @@
-#include "Game.h"
 #include "WindowRenderer.h"
 #include "InputManager.h"
-#include "Player.h"
+#include "LevelManager.h"
+
+#include "Game.h"
 
 void Game::Start(const SDL_WindowFlags windowFlag) {
     std::cout << "Starting Game.." << '\n';
@@ -25,24 +26,12 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
     this->Window = activeWindow;
 
     // Create the rendering box, and start rendering to the screen
+    this->_InputManager = new InputManager { };
     this->AppRenderer = new WindowRenderer { this->Window, SDL_RENDERER_ACCELERATED };
-    this->_InputManager = new InputManager();
+    this->levelManager = new LevelManager { this->AppRenderer->entityManager };
 
-    Entity* Background = this->AppRenderer->entityManager->CreateEntity(this, Vec2f::zero, "src/art/background/day_background.png", 10000); 
-    Entity* Ground = this->AppRenderer->entityManager->CreateEntity(this, GroundScreenLoc, "src/art/background/soil.jpg", 10000); 
-    Player* Player = this->AppRenderer->entityManager->CreatePlayer(this, MidScreenLoc + Vec2f {0, -100}, "src/art/sprites/player_sprite_sized.png", 60);
-
-    Background->CanCollide = false;
-    Background->Anchored = true;
-    Background->Name = "Day Background";
-
-    Ground->CanCollide = true;
-    Ground->Anchored = true;
-    Ground->Name = "Ground";
-
-    Player->CanCollide = true;
-    Player->Anchored = false;
-    Player->Name = "Player1";
+    this->levelManager->UnloadCurrentLevel();
+    this->levelManager->LoadLevel(this, "level1");
 
     this->AppRenderer->entityManager->AwakeEntities();
 

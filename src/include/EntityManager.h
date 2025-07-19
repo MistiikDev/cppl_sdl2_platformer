@@ -3,7 +3,9 @@
 
 #include <vector>
 #include <SDL2/SDL.h>
+#include "EntityData.h"
 
+class Game;
 class Entity;
 class Player;
 
@@ -11,8 +13,8 @@ class EntityManager {
     public:
         EntityManager(SDL_Renderer* activeRenderer): activeRenderer(activeRenderer) {};
         
-        Entity* CreateEntity(Game* currentGameInstance, const Vec2f& position, const char* textureFilePath, double Mass);
-        Player* CreatePlayer(Game* currentGameInstance, const Vec2f& position, const char* textureFilePath, double Mass);
+        Entity* CreateEntity(Game* currentGameInstance, EntityData& entityData);
+        Player* CreatePlayer(Game* currentGameInstance, EntityData& entityData);
 
         void AwakeEntities();
         void UpdateEntities(float deltaTime);
