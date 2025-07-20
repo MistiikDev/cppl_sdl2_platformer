@@ -64,8 +64,6 @@ bool LevelManager::LoadLevel(Game* gameInstance, const std::string& levelName) {
 
         CurrentLevel.Data.Entities.push_back(entity);
 
-        std::cout << entity.Class;
-
         if (entity.Class == "Player") {
             this->currentEntityManager->CreatePlayer(gameInstance, entity);
         } else if (entity.Class == "Entity") {

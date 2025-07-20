@@ -18,6 +18,32 @@
             }, 
 
             {
+                "Name": "Platform",
+                "Class": "Entity",
+                "Position": [640, 600],
+                "Mass": 1000,
+
+                "Anchored": true,
+                "CanCollide": true,
+                "TexturePath": "src/art/background/soil.jpg",
+                "RenderingGroup" : "",
+                "RenderLayer": 0
+            }, 
+
+            {
+                "Name": "Platform",
+                "Class": "Entity",
+                "Position": [440, 700],
+                "Mass": 1000,
+
+                "Anchored": true,
+                "CanCollide": true,
+                "TexturePath": "src/art/background/soil.jpg",
+                "RenderingGroup" : "",
+                "RenderLayer": 0
+            }, 
+
+            {
                 "Name": "Player1",
                 "Class": "Player",
                 "Position": [640, 360],

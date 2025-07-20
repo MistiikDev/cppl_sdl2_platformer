@@ -34,7 +34,7 @@ void WindowRenderer::Render() {
         destRect.w = e->GetEntityRenderingBox().w;
         destRect.h = e->GetEntityRenderingBox().h;
 
-        SDL_RenderCopy(this->activeRenderer, e->GetTexture(), &sourceRect, &destRect);
+        SDL_RenderCopyEx(this->activeRenderer, e->GetTexture(), &sourceRect, &destRect, e->GetRotation(), e->GetAnchorPoint(), e->GetRendererFlip()  );
     }
 }
 

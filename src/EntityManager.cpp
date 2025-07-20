@@ -23,6 +23,8 @@ Entity* EntityManager::CreateEntity(Game* currentGameInstance, EntityData& entit
         texture
     };
 
+    e->Awake();
+
     activeEntities.push_back(e);
 
     return e;
@@ -37,16 +39,12 @@ Player* EntityManager::CreatePlayer(Game* currentGameInstance, EntityData& entit
         texture
     };
 
+    p->Awake();
+
     activeEntities.push_back(p);
 
     return p;
 };
-
-void EntityManager::AwakeEntities() {
-    for (Entity* e : this->activeEntities) {
-        e->Awake();
-    }
-}
 
 void EntityManager::UpdateEntities(float deltaTime) {    
     for (Entity* e : this->activeEntities) {

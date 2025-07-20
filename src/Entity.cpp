@@ -1,9 +1,40 @@
 #include "Game.h"
 #include "Entity.h"
+#include "Animator.h"
 
-void Entity::SetPosition(Vec2f& newposition) {
-    int w = this->entityBox.w;
-    int h = this->entityBox.h;
+Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) : 
+    CurrentGameInstance(game),                               
+    Position(data.Position),                                                                     
+    Mass(data.Mass),                                                                        
+    Texture(texture),                                                                    
+    DefaultTexture(texture),
+    RenderingGroup(data.RenderingGroup),         
+    RenderingLayer(data.RenderingLayer),
+    Anchored(data.Anchored),                                       
+    CanCollide(data.CanCollide)
+{
+    BoundingBox.x = 0;
+    BoundingBox.y = 0;
+
+    SDL_QueryTexture(this->Texture, NULL, NULL, &BoundingBox.w, &BoundingBox.h);
+
+    this->AnchordPoint = new SDL_Point();
+    this->AnchordPoint->x = BoundingBox.w / 2;
+    this->AnchordPoint->y = BoundingBox.h / 2; // Set as default
+
+    Rotation = 0;
+    Flip = SDL_FLIP_NONE;
+};
+
+void Entity::Awake()
+{
+    this->animator = new Animator{this};
+}
+
+void Entity::SetPosition(Vec2f &newposition)
+{
+    int w = this->BoundingBox.w;
+    int h = this->BoundingBox.h;
     int screen_w, screen_h;
 
     this->CurrentGameInstance->GetWindowSize(screen_w, screen_h);
@@ -15,18 +46,19 @@ void Entity::SetPosition(Vec2f& newposition) {
     this->Position = newposition;
 }
 
-void Entity::Update(float deltaTime) {
-
-} 
-
-void Entity::Push(Vec2f& push_vector, float speed) {
-    if (this->isPushing) { return; }
+void Entity::Push(Vec2f &push_vector, float speed)
+{
+    if (this->isPushing)
+    {
+        return;
+    }
     this->isPushing = true;
 
     Vec2f startPosition = this->GetPosition();
     Vec2f targetPosition = startPosition + push_vector;
 
-    for (int i = 0; i <= 100; i++) {
+    for (int i = 0; i <= 100; i++)
+    {
         float t = static_cast<float>(i) / 100.0f;
         Vec2f lerpedPosition = startPosition.Lerp(targetPosition, t);
 
@@ -34,4 +66,9 @@ void Entity::Push(Vec2f& push_vector, float speed) {
     }
 
     this->isPushing = false;
+}
+
+void Entity::Update(float deltaTime)
+{
+    this->animator->UpdateAnimations(deltaTime);
 }

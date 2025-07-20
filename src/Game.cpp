@@ -32,9 +32,7 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
 
     this->levelManager->UnloadCurrentLevel();
     this->levelManager->LoadLevel(this, "level1");
-
-    this->AppRenderer->entityManager->AwakeEntities();
-
+    
     //
     this->Run();
 }
@@ -63,7 +61,6 @@ void Game::Run() {
 
         // Update and Render
         this->AppRenderer->ClearViewport();
-
         this->AppRenderer->entityManager->UpdateEntities(this->DeltaTime);
 
         this->AppRenderer->Render();
@@ -74,14 +71,15 @@ void Game::Run() {
 }
 
 void Game::Stop() {
-    std::cout << "Destroying deps:" << '\n';
-
-    this->AppRenderer->Quit();
+    this->levelManager->UnloadCurrentLevel();
     this->_InputManager->Quit();
+
     this->AppRenderer->entityManager->ClearEntities();
-    
+    this->AppRenderer->Quit();
+
     SDL_DestroyWindow(this->Window);
 
     std::cout << "Quitting game...";
+
     SDL_Quit();
 }

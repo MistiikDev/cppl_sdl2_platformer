@@ -16,9 +16,7 @@ class EntityManager {
         Entity* CreateEntity(Game* currentGameInstance, EntityData& entityData);
         Player* CreatePlayer(Game* currentGameInstance, EntityData& entityData);
 
-        void AwakeEntities();
         void UpdateEntities(float deltaTime);
-
         void ClearEntities();
 
         std::vector<Entity*>& GetActiveEntities() { return activeEntities; };

@@ -4,44 +4,26 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 #include "Vec2f.h"
 #include "InputManager.h"
 #include "EntityData.h"
+#include "Animation.h"
+#include "Animator.h"
 
 class Game;
 class Entity {
     public:
-        Entity(Game* CurrentGameInstance, EntityData& entityData, SDL_Texture* EntityTexture) : CurrentGameInstance(CurrentGameInstance) {
-            this->Name = entityData.Name;
-
-            this->Anchored = entityData.Anchored;
-            this->CanCollide = entityData.CanCollide;
-            
-            this->Position = entityData.Position; // Start Position;
-            this->Velocity = Vec2f {0, 0};
-            this->Acceleration = Vec2f {0, 0};
-
-            this->Mass = entityData.Mass;
-
-            entityBox.x = 0;
-            entityBox.y = 0;
-
-            this->entityTexture = EntityTexture;
-
-            this->RenderingGroup = entityData.RenderingGroup;
-            this->RenderingLayer = entityData.RenderingLayer;
-
-            SDL_QueryTexture(this->entityTexture, NULL, NULL, &entityBox.w, &entityBox.h);
-        };
-
+        Entity(Game* game, const EntityData& data, SDL_Texture* texture);
         ~Entity() { }
+
+        // -- Propreties -- 
 
         bool Anchored;
         bool CanCollide;
-        
         bool isPushing = false;
         bool isJumping = false;
         bool isGrounded = false;
@@ -51,17 +33,18 @@ class Entity {
 
         int RenderingLayer;
 
-        virtual void Awake() {};
-        virtual void Update(float deltaTime);
+        double GetMass() { return Mass; };
+
+        // -- Physics -- 
+        
+        void SetPosition(Vec2f& position);
+        void SetVelocity(const Vec2f& velocity) { this->Velocity = velocity; }; 
+        void SetAcceleration(const Vec2f& acceleration) { this->Acceleration = acceleration; };
+        void SetRotation(int Rotation) { this->Rotation = Rotation; };
 
         void Push(Vec2f& push_vector, float speed = 0.1f);
 
-        void SetPosition(Vec2f& position);
-        void SetVelocity(const Vec2f& velocity) { this->Velocity = velocity; }; 
-        void SetAcceleration(const Vec2f& acceleration) {this->Acceleration = acceleration; };
-
-        double GetMass() { return Mass; };
-
+        int GetRotation() { return Rotation; };
         Vec2f& GetPosition() { return Position; };
         Vec2f& GetVelocity() { return Velocity ;};
         Vec2f& GetAcceleration() { return Acceleration; };
@@ -73,8 +56,32 @@ class Entity {
             };
         }
 
-        SDL_Rect& GetEntityRenderingBox() { return entityBox; };
-        SDL_Texture* GetTexture() { return entityTexture; };
+        // -- Rendering --
+
+        void SetRendererFlip(SDL_RendererFlip newFlip) { this->Flip = newFlip; };
+        void SetAnchorPoint(SDL_Point* anchorPoint) { this->AnchordPoint = anchorPoint; };
+        void SetTexture(SDL_Texture* texture) { this->Texture = texture; };
+        void SetEntityRenderingBounds(SDL_Rect& boundingBox) { this->BoundingBox = boundingBox; }
+        
+        void ResetTextureDefault() { this->Texture = this->DefaultTexture; };
+
+        SDL_Texture* GetTexture() { return Texture; };
+        SDL_Point* GetAnchorPoint() { return this->AnchordPoint; };
+
+        SDL_RendererFlip GetRendererFlip() { return this->Flip; };
+        SDL_Rect& GetEntityRenderingBox() { return BoundingBox; };
+
+        virtual void Awake();
+        virtual void Update(float deltaTime);
+
+        // -- Animation -- 
+
+        Animator* animator;
+
+    protected:
+
+        Game* CurrentGameInstance;
+
     private:
         double Mass;
 
@@ -82,10 +89,15 @@ class Entity {
         Vec2f Velocity;
         Vec2f Acceleration;
 
-        SDL_Rect entityBox;
-        SDL_Texture* entityTexture;
+        int Rotation;
+        SDL_Rect BoundingBox;
+        SDL_RendererFlip Flip;
 
-        Game* CurrentGameInstance;
+        SDL_Point* AnchordPoint;
+        SDL_Texture* DefaultTexture;
+        SDL_Texture* Texture;
+        
+        std::vector<std::unique_ptr<AnimationTrack>> LoadedAnimations;
 };
 
 #endif

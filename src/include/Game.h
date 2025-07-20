@@ -11,6 +11,7 @@
 #include <cassert>
 #include <chrono>
 #include <thread>
+#include <memory>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -35,6 +36,10 @@ class Game {
         void GetWindowSize(int &w, int& h) { 
             w = WIDTH;
             h = HEIGTH;
+        }
+
+        SDL_Window* GetWindow() {
+            return Window;
         }
 
         Vec2f MidScreenLoc { WIDTH / 2, HEIGTH / 2 };

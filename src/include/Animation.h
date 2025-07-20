@@ -2,31 +2,47 @@
 #define ANIMATION_H 
 
 #include <vector>
+#include <thread>
 #include <map>
+#include <memory>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-struct AnimationData {
-    int frameCount;
-    float duration;
-
-    std::map<SDL_Rect&, SDL_Texture*> frames; // Rendering bounding box -> Texture;
-};
+class Entity;
 
 struct Animation {
-    Animation(AnimationData& animationData): animationData(animationData) {};
+    float duration;
+    bool looped;
+    
+    std::string Name;
+    
+    std::vector<std::shared_ptr<SDL_Texture>> frames;
+};
 
-    AnimationData& animationData;
+struct AnimationTrack {
+    AnimationTrack(Animation& animationData, Entity* e);
+
+    Animation& animation;
+    Entity* targetEntity;
 
     int currentFrame;
     float elapsedTime;
 
+    bool canPlay = true; // internal
+
     bool isLooping;
     bool isFinished;
+    bool isPlaying;
 
-    void Play(float speed = 1.0f);
+    float speed;
+
+    void Play(float speed);
     void Stop();
-    void Pause();
+
+    void Clear();
+
+    void Update(float deltaTime);
 };
 
 #endif
