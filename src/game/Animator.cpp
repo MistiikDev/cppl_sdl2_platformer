@@ -1,26 +1,27 @@
 #include "Animator.h"
+#include "Entity.h"
+
 #include <iostream>
 
-void Animator::Play(std::string& AnimationName, float speed) {
-    if (this->loadedAnimation.count(AnimationName) == 0 || this->loadedAnimation[AnimationName]->isPlaying) {
+void Animator::Play(std::string AnimationName, float speed) {
+    if (this->target->LoadedAnimations.count(AnimationName) == 0 || this->target->LoadedAnimations[AnimationName]->isPlaying) {
         return;
     }
-
-    this->loadedAnimation[AnimationName]->Play(speed);
+    this->target->LoadedAnimations[AnimationName]->Play(speed);
 }
 
-void Animator::Stop(std::string& AnimationName) {
-    if (this->loadedAnimation.count(AnimationName) == 0 || this->loadedAnimation[AnimationName]->isFinished) {
+void Animator::Stop(std::string AnimationName) {
+    if (this->target->LoadedAnimations.count(AnimationName) == 0 || this->target->LoadedAnimations[AnimationName]->isFinished) {
         return;
     }
 
-    this->loadedAnimation[AnimationName]->Stop();
+    this->target->LoadedAnimations[AnimationName]->Stop();
 }
 
 void Animator::UpdateAnimations(float deltaTime) {
     std::vector<std::string> animationsToClear;
 
-    for (auto& [animationName, animationTrack] : this->loadedAnimation) {
+    for (auto& [animationName, animationTrack] : this->target->LoadedAnimations) {
         if (animationTrack) {
             animationTrack->Update(deltaTime);
 
@@ -31,14 +32,6 @@ void Animator::UpdateAnimations(float deltaTime) {
     }
 
     for (const auto& name : animationsToClear) {
-        this->loadedAnimation.erase(name);
+        this->target->LoadedAnimations.erase(name);
     }
-}
-
-void Animator::LoadAnimation(Animation& animation) {
-    auto track = new AnimationTrack { animation, this->target };
-
-    this->loadedAnimation[animation.Name] = track;
-
-    std::cout << this->loadedAnimation.size();
 }

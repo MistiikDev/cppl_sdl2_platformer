@@ -24,11 +24,21 @@ Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) :
 
     Rotation = 0;
     DirectionFacing = SDL_FLIP_NONE;
+    ClassName = "Entity";
 };
 
 void Entity::Awake()
 {
     this->animator = new Animator{this};
+    std::vector<AnimationData> AnimationPackage = AnimationLoader::LoadAnimDefinitions("src/assets/data/entity_animations.json", this->ClassName); // Hardcoded
+   
+    SDL_Renderer* renderer = SDL_GetRenderer(this->CurrentGameInstance->GetWindow());
+
+    for (AnimationData& data : AnimationPackage) {
+        std::unique_ptr<AnimationTrack> track = AnimationLoader::LoadTrackFromDefinition(data, renderer, this);
+
+        this->LoadedAnimations[data.Name] = std::move(track);
+    }
 }
 
 void Entity::SetPosition(Vec2f &newposition)

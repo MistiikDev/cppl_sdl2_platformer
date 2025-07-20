@@ -14,14 +14,12 @@ class Animator {
     public:
         Animator(Entity* e) {target = e;};
 
-        void Play(std::string& AnimationName, float speed);
-        void Stop(std::string& AnimationName);
-        
-        void LoadAnimation(Animation& animation);
+        void Play(std::string AnimationName, float speed);
+        void Stop(std::string AnimationName);
+
         void UpdateAnimations(float deltaTime);
     private:
         Entity* target;
-        std::map<std::string, AnimationTrack*> loadedAnimation;
 };
 
 #endif

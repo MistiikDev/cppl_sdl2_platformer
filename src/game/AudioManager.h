@@ -6,7 +6,9 @@ class AudioManager {
         static std::map<std::string&, AudioTrack*> audioTracks;
 
         static void LoadAudio(AudioData& trackData) {
-            auto track = new AudioTrack {trackData};
+            auto track = new AudioTrack {
+                trackData
+            };
 
             audioTracks[trackData.TrackName] = track;
         }

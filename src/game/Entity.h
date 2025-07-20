@@ -11,6 +11,7 @@
 #include "Vec2f.h"
 #include "InputManager.h"
 #include "EntityData.h"
+
 #include "Animation.h"
 #include "Animator.h"
 
@@ -29,6 +30,7 @@ class Entity {
         bool isGrounded = false;
 
         std::string Name;
+        std::string ClassName;
         std::string RenderingGroup;
 
         int RenderingLayer;
@@ -77,7 +79,8 @@ class Entity {
         // -- Animation -- 
 
         Animator* animator;
-
+        
+        std::map<std::string, std::unique_ptr<AnimationTrack>> LoadedAnimations;
     protected:
 
         Game* CurrentGameInstance;
@@ -96,8 +99,6 @@ class Entity {
         SDL_Point* AnchordPoint;
         SDL_Texture* DefaultTexture;
         SDL_Texture* Texture;
-        
-        std::vector<std::unique_ptr<AnimationTrack>> LoadedAnimations;
 };
 
 #endif

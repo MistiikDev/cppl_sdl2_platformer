@@ -1,0 +1,21 @@
+{
+    "Player": {
+        "WalkAnimation": {
+            "name": "WalkAnimation",
+            "duration": 0.4,
+            "looped": true,
+            "frames": [
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk1.png",
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk2.png",
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk3.png",
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk4.png",
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk5.png",
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk6.png",
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk7.png",
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk8.png",
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk9.png",
+                "src/assets/art/sprites/player/animations/walking/player_sprite_walk10.png"
+            ]
+        }
+    }
+}

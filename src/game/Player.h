@@ -6,7 +6,9 @@
 class Game;
 class Player : public Entity {
     public:
-        Player(Game* currentGameInstance, EntityData& entityData, SDL_Texture* texture) : Entity(currentGameInstance, entityData, texture) {};
+        Player(Game* currentGameInstance, EntityData& entityData, SDL_Texture* texture) : Entity(currentGameInstance, entityData, texture) {
+            ClassName = "Player";
+        };
         ~Player() { };
         
         bool isWalking() { return 
@@ -14,8 +16,6 @@ class Player : public Entity {
         };
 
         Vec2f JumpForce {0, -250};
-
-        Animation walkAnimation;
 
         void Awake();
         void Update(float deltaTime);

@@ -8,32 +8,15 @@ void Player::Awake() {
     InputManager::UserInput.Subscribe(PLAYER_INPUT_REG_ID, [this](Sint32 key, Uint8 state) {
         this->RegisterPlayerInput(key, state);
     });
-
-    SDL_Texture* raw_tex1 = IMG_LoadTexture(SDL_GetRenderer(this->CurrentGameInstance->GetWindow()), "src/assets/art/sprites/player_sprite_sized.png");
-    SDL_Texture* raw_tex2 = IMG_LoadTexture(SDL_GetRenderer(this->CurrentGameInstance->GetWindow()), "src/assets/art/sprites/player_sprite_sized_walking.png");
-
-    if (!raw_tex1 || !raw_tex2) {
-        std::cerr << "Failed to load texture: " << IMG_GetError() << std::endl;
-    }
-
-    auto tex1 = std::shared_ptr<SDL_Texture>(raw_tex1, SDL_DestroyTexture);
-    auto tex2 = std::shared_ptr<SDL_Texture>(raw_tex2, SDL_DestroyTexture);
-
-    this->walkAnimation.frames = { tex2, tex1 };
-    this->walkAnimation.Name = "WalkAnimation";
-    this->walkAnimation.duration = 0.4f;
-    this->walkAnimation.looped = true;
-
-    this->animator->LoadAnimation(walkAnimation);
 }
 
 void Player::Update(float deltaTime) {
     Entity::Update(deltaTime);
 
     if (this->isWalking()) {
-        this->animator->Play(this->walkAnimation.Name, 1);
+        this->animator->Play("WalkAnimation", 1);
     } else {
-        this->animator->Stop(this->walkAnimation.Name);
+        this->animator->Stop("WalkAnimation");
     }
 
     Vec2f direction(0, 0);
