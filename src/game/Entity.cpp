@@ -23,7 +23,7 @@ Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) :
     this->AnchordPoint->y = BoundingBox.h / 2; // Set as default
 
     Rotation = 0;
-    Flip = SDL_FLIP_NONE;
+    DirectionFacing = SDL_FLIP_NONE;
 };
 
 void Entity::Awake()
@@ -48,10 +48,10 @@ void Entity::SetPosition(Vec2f &newposition)
 
 void Entity::Push(Vec2f &push_vector, float speed)
 {
-    if (this->isPushing)
-    {
+    if (this->isPushing) {
         return;
     }
+    
     this->isPushing = true;
 
     Vec2f startPosition = this->GetPosition();
@@ -68,7 +68,6 @@ void Entity::Push(Vec2f &push_vector, float speed)
     this->isPushing = false;
 }
 
-void Entity::Update(float deltaTime)
-{
+void Entity::Update(float deltaTime) {
     this->animator->UpdateAnimations(deltaTime);
 }

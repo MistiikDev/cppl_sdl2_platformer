@@ -12,7 +12,7 @@
 
                 "Anchored": true,
                 "CanCollide": false,
-                "TexturePath": "src/art/background/day_background.png",
+                "TexturePath": "src/assets/art/background/day_background.png",
                 "RenderingGroup" : "",
                 "RenderLayer": -1
             }, 
@@ -25,7 +25,7 @@
 
                 "Anchored": true,
                 "CanCollide": true,
-                "TexturePath": "src/art/background/soil.jpg",
+                "TexturePath": "src/assets/art/background/soil.jpg",
                 "RenderingGroup" : "",
                 "RenderLayer": 0
             }, 
@@ -38,7 +38,7 @@
 
                 "Anchored": true,
                 "CanCollide": true,
-                "TexturePath": "src/art/background/soil.jpg",
+                "TexturePath": "src/assets/art/background/soil.jpg",
                 "RenderingGroup" : "",
                 "RenderLayer": 0
             }, 
@@ -51,7 +51,7 @@
 
                 "Anchored": false,
                 "CanCollide": true,
-                "TexturePath": "src/art/sprites/player_sprite_sized.png",
+                "TexturePath": "src/assets/art/sprites/player_sprite_sized.png",
 
                 "RenderingGroup" : "",
                 "RenderLayer": 1

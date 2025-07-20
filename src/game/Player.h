@@ -13,14 +13,15 @@ class Player : public Entity {
             this->isGrounded && this->GetVelocity().Magnitude() > 1 && !this->isJumping && (player_keyStates[SDLK_q] || player_keyStates[SDLK_d]); 
         };
 
+        Vec2f JumpForce {0, -250};
+
         Animation walkAnimation;
 
         void Awake();
         void Update(float deltaTime);
         void Jump();
 
-        void GetUserInput(Sint32 keyCode, Uint8 inputState);
-
+        void RegisterPlayerInput(Sint32 keyCode, Uint8 inputState);
     private:
 
         float walkSpeed = 175.0f;

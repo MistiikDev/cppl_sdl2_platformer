@@ -2,7 +2,7 @@
 #include "LevelManager.h"
 
 std::string LevelManager::GetLevelPath(const std::string& levelName) {
-    std::string path = "src/data/" + levelName + ".json";
+    std::string path = "src/assets/data/" + levelName + ".json";
 
     return path;
 }

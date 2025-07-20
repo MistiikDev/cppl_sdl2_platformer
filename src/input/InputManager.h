@@ -10,7 +10,7 @@
 #include <string>
 
 #include "Vec2f.h"
-#include "Signal.h"
+#include "C_Signal.h"
 
 using ActionCallback = std::function<void(std::string&, Uint8)>;
 

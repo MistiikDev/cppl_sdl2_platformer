@@ -5,13 +5,12 @@ void Player::Awake() {
     Entity::Awake();
 
     std::string PLAYER_INPUT_REG_ID = "PLAYER_INPUT_REG";
-
     InputManager::UserInput.Subscribe(PLAYER_INPUT_REG_ID, [this](Sint32 key, Uint8 state) {
-        this->GetUserInput(key, state);
+        this->RegisterPlayerInput(key, state);
     });
 
-    SDL_Texture* raw_tex1 = IMG_LoadTexture(SDL_GetRenderer(this->CurrentGameInstance->GetWindow()), "src/art/sprites/player_sprite_sized.png");
-    SDL_Texture* raw_tex2 = IMG_LoadTexture(SDL_GetRenderer(this->CurrentGameInstance->GetWindow()), "src/art/sprites/player_sprite_sized_walking.png");
+    SDL_Texture* raw_tex1 = IMG_LoadTexture(SDL_GetRenderer(this->CurrentGameInstance->GetWindow()), "src/assets/art/sprites/player_sprite_sized.png");
+    SDL_Texture* raw_tex2 = IMG_LoadTexture(SDL_GetRenderer(this->CurrentGameInstance->GetWindow()), "src/assets/art/sprites/player_sprite_sized_walking.png");
 
     if (!raw_tex1 || !raw_tex2) {
         std::cerr << "Failed to load texture: " << IMG_GetError() << std::endl;
@@ -21,14 +20,12 @@ void Player::Awake() {
     auto tex2 = std::shared_ptr<SDL_Texture>(raw_tex2, SDL_DestroyTexture);
 
     this->walkAnimation.frames = { tex2, tex1 };
-
     this->walkAnimation.Name = "WalkAnimation";
     this->walkAnimation.duration = 0.4f;
     this->walkAnimation.looped = true;
 
     this->animator->LoadAnimation(walkAnimation);
 }
-
 
 void Player::Update(float deltaTime) {
     Entity::Update(deltaTime);
@@ -44,36 +41,30 @@ void Player::Update(float deltaTime) {
 
     if (this->player_keyStates[SDLK_q]) direction.x -= 1;
     if (this->player_keyStates[SDLK_d]) direction.x += 1;
-
     if (this->player_keyStates[SDLK_SPACE]) this->Jump();
 
     Vec2f unit_direction = direction.Unit();
-    Vec2f proc_velocity = unit_direction * this->walkSpeed;
+    Vec2f player_velocity = unit_direction * this->walkSpeed;
     Vec2f currentVelocity = this->GetVelocity();
-    currentVelocity.x = proc_velocity.x;
-
-    SDL_RendererFlip flip = currentVelocity.x < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    
+    currentVelocity.x = player_velocity.x;
 
     this->SetVelocity(currentVelocity);
-    
-    if (proc_velocity.x < 0) {
-        this->SetRendererFlip(SDL_FLIP_HORIZONTAL);
-    } else if (proc_velocity.x > 0) {
-        this->SetRendererFlip(SDL_FLIP_NONE);
+
+    if (player_velocity.x < 0) {
+        this->SetDirectionFacing(SDL_FLIP_HORIZONTAL);
+    } else if (player_velocity.x > 0) {
+        this->SetDirectionFacing(SDL_FLIP_NONE);
     }
 }
 
 void Player::Jump() {
-    if (!isGrounded) return;
-
-    isJumping = true;
-
-    Vec2f jumpImpulse = Vec2f {0, -300};  // Negative Y to go up
-    this->SetVelocity(jumpImpulse);
+    if (isGrounded) {
+        isJumping = true;
+        this->SetVelocity(this->JumpForce);
+    };
 }
 
-void Player::GetUserInput(Sint32 keyCode, Uint8 inputState) {
-    bool isPressed = (inputState == SDL_PRESSED);
-
-    this->player_keyStates[keyCode] = isPressed;
+void Player::RegisterPlayerInput(Sint32 keyCode, Uint8 inputState) {
+    this->player_keyStates[keyCode] = (inputState == SDL_PRESSED);
 }

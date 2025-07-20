@@ -14,8 +14,8 @@ struct EntityData {
     bool CanCollide;
 
     std::string TexturePath;
-    
     std::string RenderingGroup;
+    
     int RenderingLayer;
 };
 

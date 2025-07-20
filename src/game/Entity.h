@@ -58,7 +58,7 @@ class Entity {
 
         // -- Rendering --
 
-        void SetRendererFlip(SDL_RendererFlip newFlip) { this->Flip = newFlip; };
+        void SetDirectionFacing(SDL_RendererFlip newFlip) { this->DirectionFacing = newFlip; };
         void SetAnchorPoint(SDL_Point* anchorPoint) { this->AnchordPoint = anchorPoint; };
         void SetTexture(SDL_Texture* texture) { this->Texture = texture; };
         void SetEntityRenderingBounds(SDL_Rect& boundingBox) { this->BoundingBox = boundingBox; }
@@ -68,7 +68,7 @@ class Entity {
         SDL_Texture* GetTexture() { return Texture; };
         SDL_Point* GetAnchorPoint() { return this->AnchordPoint; };
 
-        SDL_RendererFlip GetRendererFlip() { return this->Flip; };
+        SDL_RendererFlip GetFacingDirection() { return this->DirectionFacing; };
         SDL_Rect& GetEntityRenderingBox() { return BoundingBox; };
 
         virtual void Awake();
@@ -91,7 +91,7 @@ class Entity {
 
         int Rotation;
         SDL_Rect BoundingBox;
-        SDL_RendererFlip Flip;
+        SDL_RendererFlip DirectionFacing;
 
         SDL_Point* AnchordPoint;
         SDL_Texture* DefaultTexture;
