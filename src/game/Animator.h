@@ -7,8 +7,6 @@
 #include <iostream>
 #include <vector>
 
-#include "Animation.h"
-
 class Entity;
 class Animator {
     public:

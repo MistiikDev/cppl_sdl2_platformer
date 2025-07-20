@@ -1,5 +1,5 @@
-#include "Player.h"
 #include "Game.h"
+#include "Player.h"
 
 void Player::Awake() {
     Entity::Awake();
@@ -45,6 +45,10 @@ void Player::Jump() {
     if (isGrounded) {
         isJumping = true;
         this->SetVelocity(this->JumpForce);
+
+        std::string jump = "jump_sfx";
+
+        AudioManager::PlayAudio(jump);
     };
 }
 

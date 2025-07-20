@@ -1,12 +1,11 @@
-#include "Animator.h"
 #include "Entity.h"
 
-#include <iostream>
 
 void Animator::Play(std::string AnimationName, float speed) {
     if (this->target->LoadedAnimations.count(AnimationName) == 0 || this->target->LoadedAnimations[AnimationName]->isPlaying) {
         return;
     }
+    
     this->target->LoadedAnimations[AnimationName]->Play(speed);
 }
 

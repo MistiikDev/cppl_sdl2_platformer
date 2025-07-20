@@ -1,6 +1,7 @@
 #include "WindowRenderer.h"
 #include "InputManager.h"
 #include "LevelManager.h"
+#include "AudioManager.h"
 
 #include "Game.h"
 
@@ -32,7 +33,13 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
 
     this->levelManager->UnloadCurrentLevel();
     this->levelManager->LoadLevel(this, "level1");
-    
+    AudioManager::Init();
+    AudioManager::PreloadAudioFiles("src/assets/data/sound.json");
+
+    std::string bg_music = "bg_music";
+
+    AudioManager::PlayAudio(bg_music);
+
     //
     this->Run();
 }
@@ -76,6 +83,8 @@ void Game::Stop() {
 
     this->AppRenderer->entityManager->ClearEntities();
     this->AppRenderer->Quit();
+
+    AudioManager::Quit();
 
     SDL_DestroyWindow(this->Window);
 

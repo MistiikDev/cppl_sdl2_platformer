@@ -12,8 +12,11 @@
 #include "InputManager.h"
 #include "EntityData.h"
 
-#include "Animation.h"
+#include "AudioManager.h"
+
 #include "Animator.h"
+#include "AnimationLoader.h"
+#include "AnimationTrack.h"
 
 class Game;
 class Entity {

@@ -4,7 +4,6 @@
 
 #define WIDTH 1280
 #define HEIGTH 720
-#define GRAVITY 650
 
 #include <iostream>
 #include <vector>

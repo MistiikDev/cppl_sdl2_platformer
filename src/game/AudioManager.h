@@ -1,19 +1,34 @@
+#ifndef AUDIO_MANAGER_H
+#define AUDIO_MANAGER_H
+
+#include <iostream>
+#include <map>
+#include <fstream>
+
+#include "nlohmann/json.hpp"
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+
 #include "AudioData.h"
-#include "map"
+#include "AudioTrack.h"
+
+#define AUDIO_FREQUENCY 44188
+#define CHANNEL_TYPE 2 // Stereo
+#define AUDIO_BUFFER_SIZE 2048
 
 class AudioManager { 
     public: 
-        static std::map<std::string&, AudioTrack*> audioTracks;
+        static std::map<std::string, AudioTrack*> audioTracks;
 
-        static void LoadAudio(AudioData& trackData) {
-            auto track = new AudioTrack {
-                trackData
-            };
+        static bool Init();
 
-            audioTracks[trackData.TrackName] = track;
-        }
+        static void Quit();
 
-        static void ClearQueue() {
-            audioTracks.clear();
-        }
+        static void PreloadAudioFiles(const std::string& path);
+
+        static void LoadAudio(AudioData& trackData);
+        static void PlayAudio(std::string& trackName);
 };
+
+#endif

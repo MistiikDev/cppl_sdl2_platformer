@@ -1,9 +1,8 @@
 #include "Entity.h"
 #include "Physics.h"
 
-
 const float epsilon = 0.01f;
-const float Physics::GRAVITY = 450.0f;
+const float Physics::GRAVITY = 650.0f;
 const Vec2f Physics::GRAVITY_VECTOR = Vec2f {0, GRAVITY};
 std::vector<Entity*> Physics::ProcessedEntities;
 

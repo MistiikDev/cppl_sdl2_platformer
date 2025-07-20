@@ -1,0 +1,19 @@
+{
+    "music": {
+        "BackgroundMusic": {
+            "name": "bg_music",
+            "isLooped": true,
+            "path": "src/assets/sound/music/bg_music.mp3",
+            "duration": 0.0
+        }
+    },
+
+    "sfx": {
+        "Jumping": {
+            "name": "jump_sfx",
+            "isLooped": false,
+            "path": "src/assets/sound/sfx/jump.wav",
+            "duration": 0.0
+        }
+    }
+}
