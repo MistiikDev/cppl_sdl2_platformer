@@ -77,7 +77,7 @@ void AudioManager::PreloadAudioFiles(const std::string &path)
     }
 }
 
-void AudioManager::LoadAudio(AudioData &trackData)
+void AudioManager::LoadAudio(AudioData trackData)
 {
     auto track = new AudioTrack{
         trackData};
@@ -94,6 +94,7 @@ void AudioManager::LoadAudio(AudioData &trackData)
     if (!(track->music || track->chunk))
     {
         std::cerr << "Failed to load sound: " << Mix_GetError() << "\n";
+        delete track;
         return;
     }
 
@@ -108,7 +109,5 @@ void AudioManager::PlayAudio(std::string &trackName)
         return;
     }
 
-    std::cout << audioTracks[trackName]->data.TrackName << " : " << (audioTracks[trackName]->data.Looped ? "looped" : "not looped");
-
-    audioTracks[trackName]->Play();
+    audioTracks[trackName]->Play(); // Crashed here
 };

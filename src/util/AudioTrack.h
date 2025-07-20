@@ -1,3 +1,6 @@
+#ifndef AUDIO_TRACK_H
+#define AUDIO_TRACK_H
+
 #include "AudioData.h"
 #include "C_Signal.h"
 
@@ -20,3 +23,5 @@ struct AudioTrack {
     void Stop();
     void Pause();
 };
+
+#endif
