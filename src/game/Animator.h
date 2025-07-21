@@ -10,7 +10,7 @@
 class Entity;
 class Animator {
     public:
-        Animator(Entity* e) {target = e;};
+        Animator(Entity* e);
 
         void Play(std::string AnimationName, float speed);
         void Stop(std::string AnimationName);

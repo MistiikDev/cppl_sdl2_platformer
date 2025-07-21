@@ -11,13 +11,18 @@
 class Entity;
 class WindowRenderer {
     public:
-        WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag);
+        WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag, int Width, int Height);
 
         EntityManager* entityManager;
+
+        int logicalWidth;
+        int logicalHeigth;
 
         void Display();
         void Render();
         void ClearViewport();
+
+        void SetViewportSize(int newWidth, int newHeight);
 
         void Quit();
     private:

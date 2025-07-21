@@ -1,5 +1,9 @@
 #include "Entity.h"
 
+Animator::Animator(Entity* e) {
+    std::cout << "ANIMATOR : Created Animator for : " << e->Name << std::endl;
+    target = e;
+}
 
 void Animator::Play(std::string AnimationName, float speed) {
     if (this->target->LoadedAnimations.count(AnimationName) == 0 || this->target->LoadedAnimations[AnimationName]->isPlaying) {

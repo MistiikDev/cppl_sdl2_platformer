@@ -1,7 +1,7 @@
 #include "Entity.h"
 #include "AnimationTrack.h"
 
-AnimationTrack::AnimationTrack(AnimationData& animationData, Entity* e): animation(animationData), targetEntity(e) {
+AnimationTrack::AnimationTrack(const AnimationData& animationData, Entity* e): animation(animationData), targetEntity(e) {
     this->elapsedTime = 0.0f;
     this->isLooping = animationData.looped;
     this->currentFrame = 0;

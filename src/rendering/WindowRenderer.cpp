@@ -1,9 +1,21 @@
 #include "Entity.h"
 #include "WindowRenderer.h"
 
-WindowRenderer::WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag) {
+WindowRenderer::WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag, int Width, int Height) {
     this->activeRenderer = SDL_CreateRenderer(window, -1, renderFlag |  SDL_RENDERER_PRESENTVSYNC);
     this->entityManager = new EntityManager(this->activeRenderer);
+    
+    SDL_SetWindowResizable( window, SDL_TRUE );
+    SDL_RenderSetLogicalSize(this->activeRenderer, Width, Height);
+
+    this->logicalWidth = Width;
+    this->logicalHeigth = Height;
+
+    std::cout << "RENDERER : Loading Window Renderer" << std::endl;
+}
+
+void WindowRenderer::SetViewportSize(int newWidth, int newHeight) {
+    SDL_RenderSetViewport(this->activeRenderer, nullptr);
 }
 
 void WindowRenderer::Display() {
@@ -43,7 +55,7 @@ void WindowRenderer::ClearViewport() {
 }
 
 void WindowRenderer::Quit() {
-    std::cout << "Renderer destructed" << '\n';
+    std::cout << "RENDERER :  Destructed" << '\n';
 
     SDL_DestroyRenderer(this->activeRenderer);
 }

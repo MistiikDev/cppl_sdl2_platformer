@@ -10,8 +10,11 @@ Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) :
     RenderingGroup(data.RenderingGroup),         
     RenderingLayer(data.RenderingLayer),
     Anchored(data.Anchored),                                       
-    CanCollide(data.CanCollide)
+    CanCollide(data.CanCollide),
+    Name(data.Name)
 {
+
+    std::cout << "ENTITY : Created entity : " << data.Name << std::endl;
     BoundingBox.x = 0;
     BoundingBox.y = 0;
 
@@ -29,12 +32,16 @@ Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) :
 void Entity::Awake()
 {
     SDL_Renderer* renderer = SDL_GetRenderer(this->CurrentGameInstance->GetWindow());
-
     this->animator = new Animator{this};
-    
-    std::vector<AnimationData> AnimationPackage = AnimationLoader::LoadAnimDefinitions("src/assets/data/entity_animations.json", this->ClassName); // Hardcoded
    
-    for (AnimationData& data : AnimationPackage) {
+    auto it = AnimationLoader::AnimationPackage.find(this->ClassName);
+
+    if (it == AnimationLoader::AnimationPackage.end()) {
+        std::cerr << "No animation package found for class: " << this->ClassName << std::endl;
+        return;
+    }
+
+    for (const AnimationData& data : it->second) {
         std::unique_ptr<AnimationTrack> track = AnimationLoader::LoadTrackFromDefinition(data, renderer, this);
 
         if (track) {
@@ -48,8 +55,8 @@ void Entity::SetPosition(Vec2f &newposition)
     int w = this->BoundingBox.w;
     int h = this->BoundingBox.h;
     int screen_w, screen_h;
-
-    this->CurrentGameInstance->GetWindowSize(screen_w, screen_h);
+    
+    this->CurrentGameInstance->GetLogicalWindowSize(screen_w, screen_h);
 
     // new position.coord = clamp(0, screen_width - player_width, coord); -> screen_width - player_width = account for texture thickness!
     newposition.x = std::max(0.0, std::min((double)(screen_w - w), newposition.x));

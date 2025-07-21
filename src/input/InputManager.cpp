@@ -10,6 +10,8 @@ void InputManager::BindAction(std::string& ActionName, Sint32 keyCode, ActionCal
         return;
     }   
 
+    std::cout << "INPUT : Binding Action : " << ActionName << std::endl;
+
     Action action { ActionName, keyCode, callback };
 
     this->actions.push_back(action);
@@ -23,6 +25,8 @@ void InputManager::UnbindAction(std::string& ActionName) {
     if (iterator != this->actions.end()) {
         this->actions.erase(iterator);
     }
+
+    std::cout << "INPUT : Unbinded Action : " << ActionName << std::endl;
 }
 
 
@@ -73,7 +77,7 @@ void InputManager::Listen(SDL_Event& event) {
 }
 
 void InputManager::Quit() {
-    std::cout << "Input destructed" << std::endl;
+    std::cout << "INPUT :  Destroyed listeners" << std::endl;
 
     this->b_isListening = false;
 }

@@ -5,6 +5,9 @@
 #define WIDTH 1280
 #define HEIGTH 720
 
+#define LOGICAL_WIDTH 1920
+#define LOGICAL_HEIGTH 1080
+
 #include <iostream>
 #include <vector>
 #include <cassert>
@@ -29,13 +32,11 @@ class Game {
         
         bool Running = false;
         const char* WindowTitle;
-
+        float DeltaTime = 0.0f;
+        
         void Start( const SDL_WindowFlags windowFlag = SDL_WINDOW_ALLOW_HIGHDPI );   
         void Stop();
-        void GetWindowSize(int &w, int& h) { 
-            w = WIDTH;
-            h = HEIGTH;
-        }
+        void GetLogicalWindowSize(int &w, int& h);
 
         SDL_Window* GetWindow() {
             return Window;
@@ -47,12 +48,7 @@ class Game {
         WindowRenderer* AppRenderer;
         InputManager* _InputManager;
         LevelManager* levelManager;
-
-        float DeltaTime = 0.0f;
     private:
-        const int WindowWeigth = WIDTH;
-        const int WindowHeigth = HEIGTH;
-
         void Run();
 
         SDL_Window* Window;

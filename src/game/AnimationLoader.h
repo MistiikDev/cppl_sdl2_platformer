@@ -16,8 +16,11 @@
 
 class AnimationLoader {
     public:
-        static std::vector<AnimationData> LoadAnimDefinitions(const std::string& path, const std::string& className);
-        static std::unique_ptr<AnimationTrack> LoadTrackFromDefinition(AnimationData& animationData, SDL_Renderer* renderer, Entity* e);
+        static void Init();
+        static std::map<std::string, std::vector<AnimationData>> AnimationPackage;
+
+        static void LoadAnimDefinitions(const std::string& path);
+        static std::unique_ptr<AnimationTrack> LoadTrackFromDefinition(const AnimationData& animationData, SDL_Renderer* renderer, Entity* e);
 };
 
 #endif

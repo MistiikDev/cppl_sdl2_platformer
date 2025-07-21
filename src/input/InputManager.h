@@ -23,7 +23,11 @@ struct Action {
 class InputManager {
 
     public:
-        InputManager() { this->b_isListening = true; };
+        InputManager() { 
+            std::cout << "INPUT : Loading input listeners" << std::endl;
+            
+            this->b_isListening = true; 
+        };
 
         static SIGNAL<Sint32, Uint8> UserInput; // KEYCODE, INPUT_STATE
         static SIGNAL<Vec2f&> MouseMoveEvent;

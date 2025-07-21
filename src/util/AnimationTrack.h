@@ -13,9 +13,9 @@
 
 class Entity;
 struct AnimationTrack {
-    AnimationTrack(AnimationData& animationData, Entity* e);
+    AnimationTrack(const AnimationData& animationData, Entity* e);
 
-    AnimationData& animation;
+    AnimationData animation;
     Entity* targetEntity;
 
     std::vector<std::shared_ptr<SDL_Texture>> frames;

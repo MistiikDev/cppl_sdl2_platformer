@@ -1,31 +1,37 @@
 #include "AnimationLoader.h"
 
-std::vector<AnimationData> AnimationLoader::LoadAnimDefinitions(const std::string &path, const std::string &className)
-{
-    std::vector<AnimationData> animationPak;
+std::map<std::string, std::vector<AnimationData>> AnimationLoader::AnimationPackage;
+
+void AnimationLoader::Init() {
+    std::cout << "ANIMATION : Animation Loader Initialized" << std::endl;
+}
+
+void AnimationLoader::LoadAnimDefinitions(const std::string &path) {
+    std::cout << "ANIMATION : Loading animation data from : " << path << std::endl;
 
     std::ifstream file(path);
     nlohmann::json j;
     file >> j;
 
-    auto &animationJson = j[className];
+    for (auto &[className, animationJson] : j.items()) {
 
-    for (auto &[animationName, animationJsonData] : animationJson.items())
-    {
-        AnimationData data;
+        AnimationLoader::AnimationPackage[std::string(className)] = std::vector<AnimationData>();
 
-        data.Name = animationJsonData["name"];
-        data.duration = animationJsonData["duration"];
-        data.looped = animationJsonData["looped"];
-        data.framePaths = animationJsonData["frames"].get<std::vector<std::string>>();
+        for (auto &[animationName, animationJsonData] : animationJson.items())
+        {
+            AnimationData data;
 
-        animationPak.push_back(data);
+            data.Name = animationJsonData["name"];
+            data.duration = animationJsonData["duration"];
+            data.looped = animationJsonData["looped"];
+            data.framePaths = animationJsonData["frames"].get<std::vector<std::string>>();
+
+            AnimationLoader::AnimationPackage[std::string(className)].push_back(data);
+        } 
     }
-
-    return animationPak;
 }
 
-std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(AnimationData &animationData, SDL_Renderer *renderer, Entity *e)
+std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(const AnimationData &animationData, SDL_Renderer *renderer, Entity *e)
 {
     std::unique_ptr<AnimationTrack> track = std::make_unique<AnimationTrack>(animationData, e);
 
@@ -46,6 +52,8 @@ std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(Animati
 
         track->frames.push_back(std::shared_ptr<SDL_Texture>(tex, SDL_DestroyTexture));
     }
+
+    std::cout << "ANIMATION : Done loading animation track : " << track->animation.Name << std::endl;
 
     return track;
 }

@@ -2,11 +2,12 @@
 #include "InputManager.h"
 #include "LevelManager.h"
 #include "AudioManager.h"
+#include "AnimationLoader.h"
 
 #include "Game.h"
 
 void Game::Start(const SDL_WindowFlags windowFlag) {
-    std::cout << "Starting Game.." << '\n';
+    std::cout << "CORE : Loading SDL dependencies" << std::endl;
 
     int Init = SDL_Init( SDL_INIT_EVERYTHING );
 
@@ -26,16 +27,19 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
     this->Running = true;
     this->Window = activeWindow;
 
+    AnimationLoader::Init();
+    AudioManager::Init();
+
+    AnimationLoader::LoadAnimDefinitions("src/assets/data/entity_animations.json");
+    AudioManager::PreloadAudioFiles("src/assets/data/sound.json");
+
     // Create the rendering box, and start rendering to the screen
     this->_InputManager = new InputManager { };
-    this->AppRenderer = new WindowRenderer { this->Window, SDL_RENDERER_ACCELERATED };
+    this->AppRenderer = new WindowRenderer { this->Window, SDL_RENDERER_ACCELERATED, LOGICAL_WIDTH, LOGICAL_HEIGTH };
     this->levelManager = new LevelManager { this->AppRenderer->entityManager };
 
     this->levelManager->UnloadCurrentLevel();
     this->levelManager->LoadLevel(this, "level1");
-
-    AudioManager::Init();
-    AudioManager::PreloadAudioFiles("src/assets/data/sound.json");
 
     std::string bg_music = "bg_music";
 
@@ -60,10 +64,22 @@ void Game::Run() {
         while (SDL_PollEvent(&this->AppEventPoll)) {
             this->_InputManager->Listen(this->AppEventPoll);
 
-            if (this->AppEventPoll.type == SDL_QUIT) {
-                this->Running = false;
-                this->Stop();
-                break;
+            switch (this->AppEventPoll.type) {
+                case SDL_QUIT:
+                    this->Running = false;
+                    this->Stop();
+                    break;
+                case SDL_WINDOWEVENT_RESIZED: {
+                    // int newWidth = this->AppEventPoll.window.data1;
+                    // int newHeight = this->AppEventPoll.window.data2;
+
+                    // std::cout << "Window resized to: " << newWidth << "x" << newHeight << std::endl;
+
+                    // AppRenderer->SetViewportSize(newWidth, newHeight);
+                    break;
+                }
+                default:
+                    break;
             }
         }
 
@@ -76,6 +92,11 @@ void Game::Run() {
 
         SDL_Delay((Uint32)(1000.0f / 144.0f)); // Cap at 144Hz
     }
+}
+
+void Game::GetLogicalWindowSize(int& w, int& h) {
+    w = this->AppRenderer->logicalWidth;
+    h = this->AppRenderer->logicalHeigth;
 }
 
 void Game::Stop() {
