@@ -1,6 +1,6 @@
 #include "AudioManager.h"
 
-std::map<std::string, AudioTrack *> AudioManager::audioTracks;
+std::map<std::string, AudioTrack*> AudioManager::audioTracks;
 
 bool AudioManager::Init()
 {
@@ -9,6 +9,8 @@ bool AudioManager::Init()
         std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << "\n";
         return false;
     }
+
+    std::cout << "SDL_mixer initialized successfully.\n";
 
     return true;
 }
@@ -60,7 +62,7 @@ void AudioManager::PreloadAudioFiles(const std::string &path)
         data.Duration = musicData["duration"];
         data.audioType = AudioType::MUSIC;
 
-        LoadAudio(data);
+        AudioManager::LoadAudio(data);
     }
 
     // Load CHUNK SFX
@@ -73,14 +75,15 @@ void AudioManager::PreloadAudioFiles(const std::string &path)
         data.Duration = musicData["duration"];
         data.audioType = AudioType::SFX;
 
-        LoadAudio(data);
+        AudioManager::LoadAudio(data);
     }
 }
 
-void AudioManager::LoadAudio(AudioData trackData)
+void AudioManager::LoadAudio(AudioData& trackData)
 {
-    auto track = new AudioTrack{
-        trackData};
+    std::cout << "AUDIO: Loading: " << trackData.TrackPath << std::endl;
+
+    AudioTrack* track = new AudioTrack(trackData);
 
     if (trackData.audioType == AudioType::MUSIC)
     {
@@ -91,23 +94,24 @@ void AudioManager::LoadAudio(AudioData trackData)
         track->chunk = Mix_LoadWAV(trackData.TrackPath.c_str());
     }
 
-    if (!(track->music || track->chunk))
-    {
-        std::cerr << "Failed to load sound: " << Mix_GetError() << "\n";
+    if (!track->music && !track->chunk) {
+        std::cout << "Mix_Load failed for " << trackData.TrackName << ": " << Mix_GetError() << "\n";
+        
         delete track;
         return;
+    } else {
+        audioTracks[trackData.TrackName] = track;
     }
-
-    audioTracks[trackData.TrackName] = track;
 }
 
 void AudioManager::PlayAudio(std::string &trackName)
 {
-    if (audioTracks.count(trackName) == 0)
-    {
-        std::cout << "Failed to play sound: " << trackName << "\n";
+    auto it = audioTracks.find(trackName);
+
+    if (it == audioTracks.end() || it->second == nullptr) {
+        std::cerr << "AudioTrack not found or null for: " << trackName << "\n";
         return;
     }
 
-    audioTracks[trackName]->Play(); // Crashed here
+    it->second->Play();
 };

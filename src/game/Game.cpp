@@ -33,6 +33,7 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
 
     this->levelManager->UnloadCurrentLevel();
     this->levelManager->LoadLevel(this, "level1");
+
     AudioManager::Init();
     AudioManager::PreloadAudioFiles("src/assets/data/sound.json");
 
@@ -78,13 +79,13 @@ void Game::Run() {
 }
 
 void Game::Stop() {
+    AudioManager::Quit();
+    
     this->levelManager->UnloadCurrentLevel();
     this->_InputManager->Quit();
 
     this->AppRenderer->entityManager->ClearEntities();
     this->AppRenderer->Quit();
-
-    AudioManager::Quit();
 
     SDL_DestroyWindow(this->Window);
 

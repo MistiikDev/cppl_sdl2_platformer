@@ -43,7 +43,7 @@ void WindowRenderer::ClearViewport() {
 }
 
 void WindowRenderer::Quit() {
-    std::cout << "Destroying RENDERER." << '\n';
+    std::cout << "Renderer destructed" << '\n';
 
     SDL_DestroyRenderer(this->activeRenderer);
 }

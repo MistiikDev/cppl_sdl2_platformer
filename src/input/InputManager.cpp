@@ -73,7 +73,7 @@ void InputManager::Listen(SDL_Event& event) {
 }
 
 void InputManager::Quit() {
-    std::cout << "Destroying INPUT LISTENER." << std::endl;
+    std::cout << "Input destructed" << std::endl;
 
     this->b_isListening = false;
 }

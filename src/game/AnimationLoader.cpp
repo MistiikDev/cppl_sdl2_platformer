@@ -36,6 +36,8 @@ std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(Animati
     {
         SDL_Texture *tex = IMG_LoadTexture(renderer, path.c_str());
 
+        std::cout << "ANIMATION : Loading frame : " << path.c_str() << std::endl;
+
         if (!tex)
         {
             std::cerr << "Failed to load texture: " << path << " | " << IMG_GetError() << std::endl;

@@ -8,6 +8,8 @@ std::string LevelManager::GetLevelPath(const std::string& levelName) {
 }
 
 bool LevelManager::UnloadCurrentLevel() {
+    std::cout << "LEVEL: Unloading active level" << std::endl;
+    
     this->currentEntityManager->ClearEntities();
     this->CurrentLevel = Level();
 
@@ -61,6 +63,8 @@ bool LevelManager::LoadLevel(Game* gameInstance, const std::string& levelName) {
         } else {
             entity.RenderingLayer = 0;
         }
+
+        std::cout << "LEVEL: Loading entity : " << entity.Name << std::endl;
 
         CurrentLevel.Data.Entities.push_back(entity);
 
