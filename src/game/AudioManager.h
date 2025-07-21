@@ -28,7 +28,7 @@ class AudioManager {
         static void PreloadAudioFiles(const std::string& path);
 
         static void LoadAudio(AudioData& trackData);
-        static void PlayAudio(std::string& trackName);
+        static void PlayAudio(std::string& trackName, float volume = 1);
 };
 
 #endif

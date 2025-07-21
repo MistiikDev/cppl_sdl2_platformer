@@ -41,10 +41,6 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
     this->levelManager->UnloadCurrentLevel();
     this->levelManager->LoadLevel(this, "level1");
 
-    std::string bg_music = "bg_music";
-
-    AudioManager::PlayAudio(bg_music);
-
     //
     this->Run();
 }

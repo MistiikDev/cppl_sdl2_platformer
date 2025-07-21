@@ -22,7 +22,7 @@ class AudioTrack {
 
         SIGNAL<int> OnTrackEnd;
 
-        void Play();
+        void Play(float volume);
         void Stop();
         void Pause();
 };

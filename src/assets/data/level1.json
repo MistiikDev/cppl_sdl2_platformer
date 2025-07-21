@@ -1,60 +1,97 @@
 {
-    "Name": "Level 1",
+    "Name": "Level 1 - Platforming",
     "Version": 1,
     "Data": {
         "Entities": [
-
             {
                 "Name": "Day Background",
                 "Class": "Entity",
                 "Position": [0, 0],
                 "Mass": 1000,
-
                 "Anchored": true,
                 "CanCollide": false,
                 "TexturePath": "src/assets/art/background/day_background.png",
-                "RenderingGroup" : "",
+                "RenderingGroup": "",
                 "RenderLayer": -1
-            }, 
+            },
 
             {
-                "Name": "Platform",
+                "Name": "Ground Platform",
                 "Class": "Entity",
-                "Position": [640, 600],
+                "Position": [0, 980],
                 "Mass": 1000,
-
                 "Anchored": true,
                 "CanCollide": true,
                 "TexturePath": "src/assets/art/background/soil.jpg",
-                "RenderingGroup" : "",
+                "RenderingGroup": "",
                 "RenderLayer": 0
-            }, 
+            },
 
             {
-                "Name": "Platform",
+                "Name": "Step 1",
                 "Class": "Entity",
-                "Position": [440, 700],
+                "Position": [300, 940],
                 "Mass": 1000,
-
                 "Anchored": true,
                 "CanCollide": true,
                 "TexturePath": "src/assets/art/background/soil.jpg",
-                "RenderingGroup" : "",
+                "RenderingGroup": "",
                 "RenderLayer": 0
-            }, 
+            },
+
+            {
+                "Name": "Step 2",
+                "Class": "Entity",
+                "Position": [600, 890],
+                "Mass": 1000,
+                "Anchored": true,
+                "CanCollide": true,
+                "TexturePath": "src/assets/art/background/soil.jpg",
+                "RenderingGroup": "",
+                "RenderLayer": 0
+            },
+
+            {
+                "Name": "Step 3",
+                "Class": "Entity",
+                "Position": [900, 930],
+                "Mass": 1000,
+                "Anchored": true,
+                "CanCollide": true,
+                "TexturePath": "src/assets/art/background/soil.jpg",
+                "RenderingGroup": "",
+                "RenderLayer": 0
+            },
+
+            {
+                "Name": "Step 4",
+                "Class": "Entity",
+                "Position": [1200, 860],
+                "Mass": 1000,
+                "Anchored": true,
+                "CanCollide": true,
+                "TexturePath": "src/assets/art/background/soil.jpg",
+                "RenderingGroup": "",
+                "RenderLayer": 0
+            },
 
             {
                 "Name": "Player1",
                 "Class": "Player",
-                "Position": [640, 360],
+                "Position": [100, 900],
                 "Mass": 100,
-
                 "Anchored": false,
                 "CanCollide": true,
-                "TexturePath": "src/assets/art/sprites/player_sprite_sized.png",
-
-                "RenderingGroup" : "",
+                "TexturePath": "src/assets/art/sprites/player/player_sprite_sized.png",
+                "RenderingGroup": "",
                 "RenderLayer": 1
+            }
+        ],
+        
+        "Music": [
+            {
+                "Name": "bg_music",
+                "Volume": 2
             }
         ]
     }

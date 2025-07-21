@@ -13,7 +13,9 @@ AudioTrack::~AudioTrack()
     std::cout << "AudioTrack destructed: " << data.TrackName << " @ " << this << std::endl;
 }
 
-void AudioTrack::Play() {    
+void AudioTrack::Play(float volume) { 
+    volume = ((volume && volume >= 0) ? volume : 1);
+
     if (this->data.audioType == AudioType::MUSIC) {
         
         if (!this->music) {
@@ -22,6 +24,7 @@ void AudioTrack::Play() {
         }
 
         Mix_PlayMusic(this->music, this->data.Looped ? -1 : 1);
+        Mix_VolumeMusic(volume);
 
     } else if (this->data.audioType == AudioType::SFX) {
         
@@ -35,6 +38,8 @@ void AudioTrack::Play() {
         }
         
         this->channel = Mix_PlayChannel(DEFAULT_CHANNEL, this->chunk, this->data.Looped ? -1 : 0);
+        
+        Mix_VolumeChunk(this->chunk, volume);
     }
 
     this->isPlaying = true;

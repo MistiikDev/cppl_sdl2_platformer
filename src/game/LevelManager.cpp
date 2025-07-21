@@ -1,5 +1,6 @@
 #include "EntityManager.h"
 #include "LevelManager.h"
+#include "AudioManager.h"
 
 std::string LevelManager::GetLevelPath(const std::string& levelName) {
     std::string path = "src/assets/data/" + levelName + ".json";
@@ -44,6 +45,7 @@ bool LevelManager::LoadLevel(Game* gameInstance, const std::string& levelName) {
     CurrentLevel.Data.Entities = {};
 
     auto& entities = levelData["Data"]["Entities"];
+    auto& musics = levelData["Data"]["Music"];
 
     for (auto& e : entities) {
         EntityData entity;
@@ -73,6 +75,14 @@ bool LevelManager::LoadLevel(Game* gameInstance, const std::string& levelName) {
         } else if (entity.Class == "Entity") {
             this->currentEntityManager->CreateEntity(gameInstance, entity);
         }
+    }
+
+    for (auto& music : musics) {
+        std::string musicName = music["Name"];
+        std::cout << musicName;
+        float musicVolume = music["Volume"];
+
+        AudioManager::PlayAudio(musicName, musicVolume);
     }
 
     return true;

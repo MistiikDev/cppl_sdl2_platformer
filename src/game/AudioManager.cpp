@@ -104,7 +104,7 @@ void AudioManager::LoadAudio(AudioData& trackData)
     }
 }
 
-void AudioManager::PlayAudio(std::string &trackName)
+void AudioManager::PlayAudio(std::string &trackName, float volume)
 {
     auto it = audioTracks.find(trackName);
 
@@ -113,5 +113,5 @@ void AudioManager::PlayAudio(std::string &trackName)
         return;
     }
 
-    it->second->Play();
+    it->second->Play(volume);
 };
