@@ -3,7 +3,7 @@
         "BackgroundMusic": {
             "name": "bg_music",
             "isLooped": true,
-            "path": "src/assets/sound/music/bg_music.mp3",
+            "path": "src/assets/sound/music/bg_music_3.mp3",
             "duration": 0.0
         }
     },

@@ -24,6 +24,7 @@ class WindowRenderer;
 class InputManager;
 class PhysicsRenderer;
 class LevelManager;
+class EntityManager;
 
 class Game {
     public: 
@@ -48,6 +49,7 @@ class Game {
         WindowRenderer* AppRenderer;
         InputManager* _InputManager;
         LevelManager* levelManager;
+        EntityManager* entityManager;
     private:
         void Run();
 

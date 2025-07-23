@@ -1,46 +1,33 @@
+#include "Physics.h"
 #include "Entity.h"
 #include "Player.h"
-#include "Physics.h"
 
 #include "EntityManager.h"
 
-SDL_Texture* EntityManager::LoadTexture(const char* textureFilePath) {
-    SDL_Texture *texture = IMG_LoadTexture(this->activeRenderer, textureFilePath);
-    
-    if (!texture) {
-        std::cerr << "Texture load failed: " << IMG_GetError() << std::endl;
-    }
-
-    return texture;
-}
-
 Entity* EntityManager::CreateEntity(Game* currentGameInstance, EntityData& entityData) {
-    SDL_Texture *texture = this->LoadTexture(entityData.TexturePath.c_str());
-
-    Entity* e = new Entity { 
+    SDL_Texture *entity_texture = TextureManager::LoadTexture(entityData.TexturePath);
+    
+    Entity* e = new Entity {
         currentGameInstance, 
         entityData, 
-        texture
+        entity_texture
     };
 
     e->Awake();
-
     activeEntities.push_back(e);
 
     return e;
 };
 
 Player* EntityManager::CreatePlayer(Game* currentGameInstance, EntityData& entityData) {
-    SDL_Texture *texture = this->LoadTexture(entityData.TexturePath.c_str());
-    
-    Player* p = new Player { 
+    SDL_Texture *player_texture = TextureManager::LoadTexture(entityData.TexturePath);
+    Player* p = new Player {
         currentGameInstance, 
         entityData, 
-        texture
+        player_texture
     };
 
     p->Awake();
-
     activeEntities.push_back(p);
 
     return p;

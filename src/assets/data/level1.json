@@ -14,71 +14,10 @@
                 "RenderingGroup": "",
                 "RenderLayer": -1
             },
-
-            {
-                "Name": "Ground Platform",
-                "Class": "Entity",
-                "Position": [0, 980],
-                "Mass": 1000,
-                "Anchored": true,
-                "CanCollide": true,
-                "TexturePath": "src/assets/art/background/soil.jpg",
-                "RenderingGroup": "",
-                "RenderLayer": 0
-            },
-
-            {
-                "Name": "Step 1",
-                "Class": "Entity",
-                "Position": [300, 940],
-                "Mass": 1000,
-                "Anchored": true,
-                "CanCollide": true,
-                "TexturePath": "src/assets/art/background/soil.jpg",
-                "RenderingGroup": "",
-                "RenderLayer": 0
-            },
-
-            {
-                "Name": "Step 2",
-                "Class": "Entity",
-                "Position": [600, 890],
-                "Mass": 1000,
-                "Anchored": true,
-                "CanCollide": true,
-                "TexturePath": "src/assets/art/background/soil.jpg",
-                "RenderingGroup": "",
-                "RenderLayer": 0
-            },
-
-            {
-                "Name": "Step 3",
-                "Class": "Entity",
-                "Position": [900, 930],
-                "Mass": 1000,
-                "Anchored": true,
-                "CanCollide": true,
-                "TexturePath": "src/assets/art/background/soil.jpg",
-                "RenderingGroup": "",
-                "RenderLayer": 0
-            },
-
-            {
-                "Name": "Step 4",
-                "Class": "Entity",
-                "Position": [1200, 860],
-                "Mass": 1000,
-                "Anchored": true,
-                "CanCollide": true,
-                "TexturePath": "src/assets/art/background/soil.jpg",
-                "RenderingGroup": "",
-                "RenderLayer": 0
-            },
-
             {
                 "Name": "Player1",
                 "Class": "Player",
-                "Position": [100, 900],
+                "Position": [100, 0],
                 "Mass": 100,
                 "Anchored": false,
                 "CanCollide": true,
@@ -91,7 +30,7 @@
         "Music": [
             {
                 "Name": "bg_music",
-                "Volume": 2
+                "Volume": 30
             }
         ]
     }

@@ -11,14 +11,14 @@ Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) :
     RenderingLayer(data.RenderingLayer),
     Anchored(data.Anchored),                                       
     CanCollide(data.CanCollide),
-    Name(data.Name)
+    Name(data.Name),
+    isPassive(data.Passive)
 {
 
-    std::cout << "ENTITY : Created entity : " << data.Name << std::endl;
     BoundingBox.x = 0;
     BoundingBox.y = 0;
 
-    SDL_QueryTexture(this->Texture, NULL, NULL, &BoundingBox.w, &BoundingBox.h);
+    TextureManager::QueryTexture(this->Texture, &BoundingBox.w, &BoundingBox.h); // Set BoundingBox data
 
     this->AnchordPoint = new SDL_Point();
     this->AnchordPoint->x = BoundingBox.w / 2;
@@ -26,23 +26,24 @@ Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) :
 
     Rotation = 0;
     DirectionFacing = SDL_FLIP_NONE;
-    ClassName = "Entity";
+    ClassName = (ClassName.empty() ? ClassName : "Generic_Entity");
+
+    std::cout << "ENTITY : Loaded Entity : '" << this->Name << "' of Class : '" << this->ClassName << "'" << std::endl; 
 };
 
 void Entity::Awake()
-{
-    SDL_Renderer* renderer = SDL_GetRenderer(this->CurrentGameInstance->GetWindow());
+{    
     this->animator = new Animator{this};
    
     auto it = AnimationLoader::AnimationPackage.find(this->ClassName);
-
+    
     if (it == AnimationLoader::AnimationPackage.end()) {
         std::cerr << "No animation package found for class: " << this->ClassName << std::endl;
         return;
     }
 
     for (const AnimationData& data : it->second) {
-        std::unique_ptr<AnimationTrack> track = AnimationLoader::LoadTrackFromDefinition(data, renderer, this);
+        std::unique_ptr<AnimationTrack> track = AnimationLoader::LoadTrackFromDefinition(data, this);
 
         if (track) {
             this->LoadedAnimations[data.Name] = std::move(track);
@@ -88,5 +89,7 @@ void Entity::Push(Vec2f &push_vector, float speed)
 }
 
 void Entity::Update(float deltaTime) {
+    if (this->isPassive) return;
+
     this->animator->UpdateAnimations(deltaTime);
 }

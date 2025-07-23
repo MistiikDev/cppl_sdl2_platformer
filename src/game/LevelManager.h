@@ -11,29 +11,29 @@
 
 using json = nlohmann::json;
 
-struct LevelData {
-    std::vector<EntityData> Entities;
-};
-
 struct Level {
     std::string Name;
     int Version;
-    LevelData Data;
+
+    std::vector<EntityData> Entities;
 };
 
 class Game;
 class EntityManager;
+class Terrain;
 
 class LevelManager {
     public:
-        LevelManager(EntityManager* currentEntityManager): currentEntityManager(currentEntityManager) {};
+        LevelManager(EntityManager* currentEntityManager);
 
         std::string GetLevelPath(const std::string& levelName);
 
+        void LoadLevelGeometry(Game* gameInstance);
         bool LoadLevel(Game* currentGameInstance, const std::string& LevelName);
         bool UnloadCurrentLevel();
     private:
         EntityManager* currentEntityManager;
+        Terrain* terrainGenerator;
         Level CurrentLevel;
 };
 

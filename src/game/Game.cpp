@@ -3,6 +3,8 @@
 #include "LevelManager.h"
 #include "AudioManager.h"
 #include "AnimationLoader.h"
+#include "TextureManager.h"
+#include "EntityManager.h"
 
 #include "Game.h"
 
@@ -27,18 +29,19 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
     this->Running = true;
     this->Window = activeWindow;
 
-    AnimationLoader::Init();
+    AnimationLoader::Init(this->AppRenderer->GetRenderer());
     AudioManager::Init();
+    TextureManager::Init(this->AppRenderer->GetRenderer());
 
     AnimationLoader::LoadAnimDefinitions("src/assets/data/entity_animations.json");
     AudioManager::PreloadAudioFiles("src/assets/data/sound.json");
 
+
     // Create the rendering box, and start rendering to the screen
     this->_InputManager = new InputManager { };
     this->AppRenderer = new WindowRenderer { this->Window, SDL_RENDERER_ACCELERATED, LOGICAL_WIDTH, LOGICAL_HEIGTH };
-    this->levelManager = new LevelManager { this->AppRenderer->entityManager };
+    this->levelManager = new LevelManager { this->entityManager };
 
-    this->levelManager->UnloadCurrentLevel();
     this->levelManager->LoadLevel(this, "level1");
 
     //
@@ -48,8 +51,8 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
 void Game::Run() {
     Uint64 now = SDL_GetPerformanceCounter();
     Uint64 last = now;
-    double freq = (double)SDL_GetPerformanceFrequency();
 
+    double freq = (double)SDL_GetPerformanceFrequency();
     while (this->Running) {
             now = SDL_GetPerformanceCounter();
             this->DeltaTime = (double)(now - last) / freq; // Seconds
@@ -81,9 +84,9 @@ void Game::Run() {
 
         // Update and Render
         this->AppRenderer->ClearViewport();
-        this->AppRenderer->entityManager->UpdateEntities(this->DeltaTime);
+        this->entityManager->UpdateEntities(this->DeltaTime);
 
-        this->AppRenderer->Render();
+        this->AppRenderer->Render(this->entityManager->GetActiveEntities());
         this->AppRenderer->Display();
 
         SDL_Delay((Uint32)(1000.0f / 144.0f)); // Cap at 144Hz
@@ -97,12 +100,12 @@ void Game::GetLogicalWindowSize(int& w, int& h) {
 
 void Game::Stop() {
     AudioManager::Quit();
-    
+    TextureManager::Quit();
+
     this->levelManager->UnloadCurrentLevel();
     this->_InputManager->Quit();
-
-    this->AppRenderer->entityManager->ClearEntities();
     this->AppRenderer->Quit();
+    this->entityManager->Quit();
 
     SDL_DestroyWindow(this->Window);
 

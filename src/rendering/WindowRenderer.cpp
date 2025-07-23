@@ -3,7 +3,6 @@
 
 WindowRenderer::WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag, int Width, int Height) {
     this->activeRenderer = SDL_CreateRenderer(window, -1, renderFlag |  SDL_RENDERER_PRESENTVSYNC);
-    this->entityManager = new EntityManager(this->activeRenderer);
     
     SDL_SetWindowResizable( window, SDL_TRUE );
     SDL_RenderSetLogicalSize(this->activeRenderer, Width, Height);
@@ -14,6 +13,10 @@ WindowRenderer::WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag,
     std::cout << "RENDERER : Loading Window Renderer" << std::endl;
 }
 
+SDL_Renderer* WindowRenderer::GetRenderer() {
+    return this->activeRenderer;
+}
+
 void WindowRenderer::SetViewportSize(int newWidth, int newHeight) {
     SDL_RenderSetViewport(this->activeRenderer, nullptr);
 }
@@ -22,8 +25,7 @@ void WindowRenderer::Display() {
     SDL_RenderPresent(this->activeRenderer);
 }
 
-void WindowRenderer::Render() {
-    std::vector<Entity*> activeEntities = this->entityManager->GetActiveEntities();
+void WindowRenderer::Render(std::vector<Entity*> activeEntities) {
 
     // Sort list based off of render layers.
     std::sort(activeEntities.begin(), activeEntities.end(), 
@@ -46,7 +48,9 @@ void WindowRenderer::Render() {
         destRect.w = e->GetEntityRenderingBox().w;
         destRect.h = e->GetEntityRenderingBox().h;
 
-        SDL_RenderCopyEx(this->activeRenderer, e->GetTexture(), &sourceRect, &destRect, e->GetRotation(), e->GetAnchorPoint(), e->GetFacingDirection()  );
+        SDL_Texture* entityTexture = e->GetTexture();
+        
+        SDL_RenderCopyEx( this->activeRenderer, entityTexture, &sourceRect, &destRect, e->GetRotation(), e->GetAnchorPoint(), e->GetFacingDirection()  );
     }
 }
 

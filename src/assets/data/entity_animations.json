@@ -17,5 +17,7 @@
                 "src/assets/art/sprites/player/animations/walking/player_sprite_walk10.png"
             ]
         }
-    }
+    },
+
+    "WorldBlock": {}
 }

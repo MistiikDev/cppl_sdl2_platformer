@@ -14,17 +14,28 @@ class Player : public Entity {
         bool isWalking() { return 
             this->isGrounded && this->GetVelocity().Magnitude() > 1 && !this->isJumping && (player_keyStates[SDLK_q] || player_keyStates[SDLK_d]); 
         };
+        
+        int DashForce = 200;
+        double JumpForce = 250;
 
-        Vec2f JumpForce {0, -250};
+        float DashDuration = 0.3f;
+        float lastDash = 0;
+        float dashTimer = 0;
+
+        bool isDashing = false;
+
+        Vec2f JumpVector { 0, -250 };
+        std::string jump_sfx =  "jump_sfx";
 
         void Awake();
         void Update(float deltaTime);
         void Jump();
+        void Dash();
 
         void RegisterPlayerInput(Sint32 keyCode, Uint8 inputState);
-    private:
-
+    private:        
         float walkSpeed = 175.0f;
+
         std::unordered_map<Sint32, bool> player_keyStates;
 };
 

@@ -8,15 +8,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include "Vec2f.h"
-#include "InputManager.h"
-#include "EntityData.h"
-
 #include "AudioManager.h"
 
 #include "Animator.h"
 #include "AnimationLoader.h"
 #include "AnimationTrack.h"
+
+#include "TextureManager.h"
+
+#include "EntityData.h"
+#include "Vec2f.h"
 
 class Game;
 class Entity {
@@ -31,6 +32,7 @@ class Entity {
         bool isPushing = false;
         bool isJumping = false;
         bool isGrounded = false;
+        bool isPassive = false;
 
         std::string Name;
         std::string ClassName;
@@ -62,6 +64,8 @@ class Entity {
         }
 
         // -- Rendering --
+
+        void SetPassive(bool isPassive) {this->isPassive = isPassive;}; // Controls behaviours on entity updates.
 
         void SetDirectionFacing(SDL_RendererFlip newFlip) { this->DirectionFacing = newFlip; };
         void SetAnchorPoint(SDL_Point* anchorPoint) { this->AnchordPoint = anchorPoint; };

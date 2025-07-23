@@ -1,6 +1,10 @@
 #include "Game.h"
 #include "Player.h"
 
+void Player::RegisterPlayerInput(Sint32 keyCode, Uint8 inputState) {
+    this->player_keyStates[keyCode] = (inputState == SDL_PRESSED);
+}
+
 void Player::Awake() {
     Entity::Awake();
 
@@ -20,38 +24,29 @@ void Player::Update(float deltaTime) {
     }
 
     Vec2f direction(0, 0);
-    Vec2f currentPlayerPosition = this->GetPosition();
 
     if (this->player_keyStates[SDLK_q]) direction.x -= 1;
     if (this->player_keyStates[SDLK_d]) direction.x += 1;
     if (this->player_keyStates[SDLK_SPACE]) this->Jump();
-
-    Vec2f unit_direction = direction.Unit();
-    Vec2f player_velocity = unit_direction * this->walkSpeed;
+    
+    Vec2f player_velocity = direction.Unit() * this->walkSpeed;
     Vec2f currentVelocity = this->GetVelocity();
     
     currentVelocity.x = player_velocity.x;
-
-    this->SetVelocity(currentVelocity);
 
     if (player_velocity.x < 0) {
         this->SetDirectionFacing(SDL_FLIP_HORIZONTAL);
     } else if (player_velocity.x > 0) {
         this->SetDirectionFacing(SDL_FLIP_NONE);
     }
+
+    this->SetVelocity(currentVelocity);
 }
 
 void Player::Jump() {
     if (isGrounded) {
         isJumping = true;
-        this->SetVelocity(this->JumpForce);
-
-        std::string jump = "jump_sfx";
-
-        AudioManager::PlayAudio(jump);
+        this->SetVelocity(this->JumpVector);
+        AudioManager::PlayAudio(this->jump_sfx, 30);
     };
-}
-
-void Player::RegisterPlayerInput(Sint32 keyCode, Uint8 inputState) {
-    this->player_keyStates[keyCode] = (inputState == SDL_PRESSED);
 }

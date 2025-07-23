@@ -1,8 +1,16 @@
 #include "AnimationLoader.h"
 
 std::map<std::string, std::vector<AnimationData>> AnimationLoader::AnimationPackage;
+SDL_Renderer* AnimationLoader::Renderer;
 
-void AnimationLoader::Init() {
+void AnimationLoader::Init(SDL_Renderer* Renderer) {
+    if (Renderer == nullptr) {
+        std::cerr << "[ERR] ANIMATION : Renderer PTR is NULL!" << std::endl;
+        return;
+    }
+
+    AnimationLoader::Renderer = Renderer;
+
     std::cout << "ANIMATION : Animation Loader Initialized" << std::endl;
 }
 
@@ -31,26 +39,26 @@ void AnimationLoader::LoadAnimDefinitions(const std::string &path) {
     }
 }
 
-std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(const AnimationData &animationData, SDL_Renderer *renderer, Entity *e)
+std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(const AnimationData &animationData, Entity *e)
 {
     std::unique_ptr<AnimationTrack> track = std::make_unique<AnimationTrack>(animationData, e);
 
     track->animation = animationData;
     track->targetEntity = e;
 
-    for (const auto &path : animationData.framePaths)
+    for (const std::string path : animationData.framePaths)
     {
-        SDL_Texture *tex = IMG_LoadTexture(renderer, path.c_str());
+        SDL_Texture* frame_texture = TextureManager::LoadTexture(path.c_str());
 
         std::cout << "ANIMATION : Loading frame : " << path.c_str() << std::endl;
 
-        if (!tex)
+        if (!frame_texture)
         {
             std::cerr << "Failed to load texture: " << path << " | " << IMG_GetError() << std::endl;
             continue;
         }
 
-        track->frames.push_back(std::shared_ptr<SDL_Texture>(tex, SDL_DestroyTexture));
+        track->frames.push_back(std::shared_ptr<SDL_Texture>(frame_texture, SDL_DestroyTexture));
     }
 
     std::cout << "ANIMATION : Done loading animation track : " << track->animation.Name << std::endl;

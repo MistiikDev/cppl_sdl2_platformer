@@ -13,6 +13,8 @@ struct EntityData {
     bool Anchored;
     bool CanCollide;
 
+    bool Passive;
+
     std::string TexturePath;
     std::string RenderingGroup;
     
