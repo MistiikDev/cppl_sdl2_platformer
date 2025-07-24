@@ -22,6 +22,8 @@ class EntityManager {
         std::shared_ptr<Player> CreatePlayer(EntityData& entityData);
 
         void UpdateEntities(float deltaTime);
+        void ClearEntity(std::shared_ptr<Entity>& entity);
+        
         void ClearEntities();
         void Quit();
 

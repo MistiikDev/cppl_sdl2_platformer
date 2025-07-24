@@ -82,6 +82,18 @@ void EntityManager::UpdateEntities(float deltaTime) {
 }
 
 
+void EntityManager::ClearEntity(std::shared_ptr<Entity>& entity) {
+    auto it = std::find(this->activeEntities.begin(), this->activeEntities.end(), entity);
+
+    if (it == this->activeEntities.end()) {
+        std::cout << "[ERR] ENTITY MANAGER : Entity to Delete is not registered! " << std::endl;
+        return;
+    }
+
+    this->activeEntities.erase(it);
+    std::cout << "ENTITY MANAGER : Successfully deleted Entity @ " << entity << std::endl;
+}
+
 void EntityManager::ClearEntities() {
     int size = this->activeEntities.size();
     this->activeEntities.clear();
