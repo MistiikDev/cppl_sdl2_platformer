@@ -41,28 +41,46 @@ std::shared_ptr<Player> EntityManager::CreatePlayer(EntityData& entityData) {
 };
 
 void EntityManager::UpdateEntities(float deltaTime) {
+    Vec2f playerPrevPos;
+    Vec2f playerNewPos;
+
+    if (this->localPlayer != nullptr) {
+        playerPrevPos = this->localPlayer->GetPosition();
+    }
+
     for (auto& entity : this->activeEntities) {
         Entity* e = entity.get();
 
         if (!e->Anchored) {
-            Physics::UpdatePositionInWorld(e, deltaTime); // Gravity work..
+            Physics::UpdatePositionInWorld(e, deltaTime);
         }
 
         e->Update(deltaTime);
+    }
 
-        // Set position according to player moving
-        if (this->localPlayer != nullptr && e != this->localPlayer.get()) {
-            Vec2f currentPosition = e->GetPosition();
-            Vec2f playerVelocity = this->localPlayer->GetVelocity();
-            Vec2f entityPosition = currentPosition + ((Vec2f::zero - playerVelocity) * deltaTime);
-            entityPosition.y = currentPosition.y;
+    Physics::CheckEntityCollisions(this->activeEntities);
 
-            e->SetPosition(entityPosition, false);
+    if (this->localPlayer != nullptr) {
+        playerNewPos = this->localPlayer->GetPosition();
+        
+        Vec2f displacement = playerNewPos - playerPrevPos;
+
+        playerPrevPos.y = playerNewPos.y; // Let the player update its y position (jumps...)
+        displacement.y = 0; // Lock player X-Axis
+
+        this->localPlayer->SetPosition(playerPrevPos, false);
+
+        for (auto& entity : this->activeEntities) {
+            Entity* e = entity.get();
+            if (e == this->localPlayer.get()) continue;
+
+            Vec2f centeredOffsetPosition = e->GetPosition() - (displacement); // Offset every other entity by the opposite of deltaPlayer displacement
+            
+            e->SetPosition(centeredOffsetPosition, false);
         }
     }
-    
-    Physics::CheckEntityCollisions(this->activeEntities); 
 }
+
 
 void EntityManager::ClearEntities() {
     int size = this->activeEntities.size();

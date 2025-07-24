@@ -44,7 +44,7 @@ class Entity {
 
         // -- Physics -- 
         
-        
+
         void SetPosition(Vec2f& position, bool stayInBounds);
         void SetVelocity(const Vec2f& velocity) { this->Velocity = velocity; }; 
         void SetAcceleration(const Vec2f& acceleration) { this->Acceleration = acceleration; };
@@ -56,6 +56,8 @@ class Entity {
         Vec2f& GetPosition() { return Position; };
         Vec2f& GetVelocity() { return Velocity ;};
         Vec2f& GetAcceleration() { return Acceleration; };
+
+        Vec2f& GetRealDisplacement() { return this->realDisplacement; };
 
         Vec2f GetSize() {
             return Vec2f {
@@ -100,6 +102,8 @@ class Entity {
         Vec2f Position;
         Vec2f Velocity;
         Vec2f Acceleration;
+
+        Vec2f realDisplacement;
 
         SDL_Rect BoundingBox;
         SDL_RendererFlip DirectionFacing;

@@ -6,6 +6,8 @@ void Player::RegisterPlayerInput(Sint32 keyCode, Uint8 inputState) {
 }
 
 void Player::Awake() {
+    this->isPassive = false;
+    
     Entity::Awake();
 
     std::string PLAYER_INPUT_REG_ID = "PLAYER_INPUT_REG";
@@ -39,6 +41,9 @@ void Player::Update(float deltaTime) {
     } else if (player_velocity.x > 0) {
         this->SetDirectionFacing(SDL_FLIP_NONE);
     }
+
+    std::cout << "New Velocity : ";
+    currentVelocity.print();
 
     this->SetVelocity(currentVelocity);
 }

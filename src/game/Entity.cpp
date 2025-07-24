@@ -47,8 +47,6 @@ void Entity::Awake()
             this->LoadedAnimations[data.Name] = std::move(track);
         }
     }
-
-    std::cout << this->ClassName << std::endl;
 }
 
 void Entity::SetPosition(Vec2f &newposition, bool stayInBounds = true)
@@ -77,7 +75,6 @@ void Entity::Push(Vec2f &push_vector, float speed)
 
     Vec2f startPosition = this->GetPosition();
     Vec2f targetPosition = startPosition + push_vector;
-
     for (int i = 0; i <= 100; i++)
     {
         float t = static_cast<float>(i) / 100.0f;

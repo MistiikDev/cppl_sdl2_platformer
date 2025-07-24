@@ -23,11 +23,9 @@ class EntityManager {
 
         void UpdateEntities(float deltaTime);
         void ClearEntities();
-        
-        std::shared_ptr<Player> localPlayer;
-
         void Quit();
 
+        std::shared_ptr<Player> localPlayer;
         std::vector<std::shared_ptr<Entity>>& GetActiveEntities() { return activeEntities; };
     
     private:
