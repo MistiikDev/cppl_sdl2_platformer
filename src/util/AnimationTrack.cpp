@@ -37,7 +37,7 @@ void AnimationTrack::Update(float deltaTime) {
     }
 
     if (frameAdvanced) {
-        SDL_Texture* frameTexture = this->frames[this->currentFrame].get();
+        std::shared_ptr<SDL_Texture> frameTexture = this->frames[this->currentFrame];
         
         if (!frameTexture) {
             std::cerr << "[Animation] Null texture in frame " << this->currentFrame << std::endl;
@@ -45,7 +45,7 @@ void AnimationTrack::Update(float deltaTime) {
         }
 
         SDL_Rect frameBoundingBox{};
-        if (SDL_QueryTexture(frameTexture, nullptr, nullptr, &frameBoundingBox.w, &frameBoundingBox.h) != 0) {
+        if (SDL_QueryTexture(frameTexture.get(), nullptr, nullptr, &frameBoundingBox.w, &frameBoundingBox.h) != 0) {
             std::cerr << "[Animation] SDL_QueryTexture failed: " << SDL_GetError() << "\n";
             return;
         }

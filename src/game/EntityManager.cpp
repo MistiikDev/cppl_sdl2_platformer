@@ -1,40 +1,46 @@
-#include "Physics.h"
-#include "Entity.h"
-#include "Player.h"
-
 #include "EntityManager.h"
 
-Entity* EntityManager::CreateEntity(Game* currentGameInstance, EntityData& entityData) {
-    SDL_Texture *entity_texture = TextureManager::LoadTexture(entityData.TexturePath);
-    
-    Entity* e = new Entity {
-        currentGameInstance, 
+EntityManager::EntityManager(Game* currentGameInstance) {
+    this->currentGameInstance = currentGameInstance;
+}
+
+std::unique_ptr<Entity> EntityManager::CreateEntity(EntityData& entityData) {
+    std::shared_ptr<SDL_Texture> entity_texture = TextureManager::LoadTexture(entityData.TexturePath);
+
+    std::unique_ptr<Entity> entity_ptr = std::make_unique<Entity>(
+        this->currentGameInstance, 
         entityData, 
         entity_texture
-    };
+    );
 
-    e->Awake();
-    activeEntities.push_back(e);
+    entity_ptr->Awake();
+    activeEntities.push_back(std::move(entity_ptr));
 
-    return e;
+    return entity_ptr;
 };
 
-Player* EntityManager::CreatePlayer(Game* currentGameInstance, EntityData& entityData) {
-    SDL_Texture *player_texture = TextureManager::LoadTexture(entityData.TexturePath);
-    Player* p = new Player {
+std::unique_ptr<Player> EntityManager::CreatePlayer(EntityData& entityData) {
+    std::shared_ptr<SDL_Texture> player_texture = TextureManager::LoadTexture(entityData.TexturePath);
+
+    std::unique_ptr<Player> player_ptr = std::make_unique<Player>(
         currentGameInstance, 
-        entityData, 
+        entityData,
         player_texture
-    };
+    );
 
-    p->Awake();
-    activeEntities.push_back(p);
+    player_ptr->Awake();
 
-    return p;
+    activeEntities.push_back(
+        std::unique_ptr<Entity>(std::move(player_ptr))
+    );
+
+    return player_ptr;
 };
 
 void EntityManager::UpdateEntities(float deltaTime) {    
-    for (Entity* e : this->activeEntities) {
+    for (auto& entity : this->activeEntities) {
+        Entity* e = entity.get();
+
         if (!e->Anchored) {
             Physics::UpdatePositionInWorld(e, deltaTime); // Gravity work..
         }
@@ -46,9 +52,12 @@ void EntityManager::UpdateEntities(float deltaTime) {
 }
 
 void EntityManager::ClearEntities() {
-    for (Entity* e: this->activeEntities) {
-        delete e;
-    }
-
+    int size = this->activeEntities.size();
     this->activeEntities.clear();
+
+    std::cout << "ENTITY MANAGER : Cleared " << size << " entities" << std::endl;
+}
+
+void EntityManager::Quit() {
+    
 }

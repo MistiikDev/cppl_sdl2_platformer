@@ -15,22 +15,22 @@
 #define WORLD_WIDTH 1920
 #define BLOCK_SIZE 32
 
-class Game;
 class EntityManager;
 class Terrain {
     public:
         Terrain();
 
-        void SetEntityLoader(Game* _gameInstance, EntityManager* _entityLoader) {
-            this->gameInstance = _gameInstance;
+        void SetEntityLoader(EntityManager* _entityLoader) {
+            std::cout << "Loading Entity Loader" << std::endl;
             this->entityLoader = _entityLoader;
+
+            std::cout << "Loaded Entity Loader" << std::endl;
         }
 
         void SetSeed(uint64_t seed);
         void ClearWorld();
         void GenerateWorld();
     private:
-        Game* gameInstance;
         EntityManager* entityLoader;
         FastNoiseLite noise;
 };

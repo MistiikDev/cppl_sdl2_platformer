@@ -6,7 +6,7 @@
 class Game;
 class Player : public Entity {
     public:
-        Player(Game* currentGameInstance, EntityData& entityData, SDL_Texture* texture) : Entity(currentGameInstance, entityData, texture) {
+        Player(Game* currentGameInstance, EntityData& entityData, std::shared_ptr<SDL_Texture> texture) : Entity(currentGameInstance, entityData, texture) {
             ClassName = "Player";
         };
         ~Player() { };

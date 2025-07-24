@@ -10,7 +10,7 @@
                 "Mass": 1000,
                 "Anchored": true,
                 "CanCollide": false,
-                "TexturePath": "src/assets/art/background/day_background.png",
+                "TexturePath": "src/assets/art/background/day_background.jpg",
                 "RenderingGroup": "",
                 "RenderLayer": -1
             },

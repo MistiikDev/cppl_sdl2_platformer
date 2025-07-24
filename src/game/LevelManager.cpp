@@ -1,7 +1,10 @@
-#include "EntityManager.h"
-#include "LevelManager.h"
 #include "AudioManager.h"
+#include "Entity.h"         
+#include "Player.h"     
 #include "Terrain.h"
+#include "EntityManager.h"   
+
+#include "LevelManager.h"
 
 LevelManager::LevelManager(EntityManager* currentEntityManager): currentEntityManager(currentEntityManager) {
     terrainGenerator = new Terrain();
@@ -15,25 +18,29 @@ std::string LevelManager::GetLevelPath(const std::string& levelName) {
 
 bool LevelManager::UnloadCurrentLevel() {
     std::cout << "LEVEL: Unloading active level" << std::endl;
-    
+        
     this->currentEntityManager->ClearEntities();
     this->CurrentLevel = Level();
 
     return true;
 }
 
-void LevelManager::LoadLevelGeometry(Game* gameInstance) {
-    this->terrainGenerator->SetEntityLoader(gameInstance, this->currentEntityManager);
+void LevelManager::LoadLevelGeometry() {
+    std::cout << "LEVEL : Loading Level Geometry" << std::endl;
+
+    this->terrainGenerator->SetEntityLoader(this->currentEntityManager);
     this->terrainGenerator->GenerateWorld();
 };
 
-bool LevelManager::LoadLevel(Game* gameInstance, const std::string& levelName) {
+bool LevelManager::LoadLevel(const std::string& levelName) {
     if (!this->UnloadCurrentLevel()) {
         std::cerr << "Could not unload current level!" << std::endl;
         return false;
     }
 
-    this->LoadLevelGeometry(gameInstance);
+    std::cout << "LEVEL : Unloaded Active Level (IF ANY)" << std::endl;
+
+    this->LoadLevelGeometry();
 
     std::string LevelPath = this->GetLevelPath(levelName);
     std::ifstream f(LevelPath);
@@ -80,9 +87,9 @@ bool LevelManager::LoadLevel(Game* gameInstance, const std::string& levelName) {
         CurrentLevel.Entities.push_back(entity);
 
         if (entity.Class == "Player") {
-            this->currentEntityManager->CreatePlayer(gameInstance, entity);
+            this->currentEntityManager->CreatePlayer(entity);
         } else if (entity.Class == "Entity") {
-            this->currentEntityManager->CreateEntity(gameInstance, entity);
+            this->currentEntityManager->CreateEntity(entity);
         } else {
             std::cerr << "Unknown entity class: " << entity.Class << std::endl;
         }

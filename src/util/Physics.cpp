@@ -29,10 +29,12 @@ void Physics::UpdatePositionInWorld(Entity* e, float deltaTime) {
     e->SetAcceleration(Vec2f::zero);
 }
 
-void Physics::CheckEntityCollisions(std::vector<Entity*>& e_list) {
+void Physics::CheckEntityCollisions(std::vector<std::unique_ptr<Entity>>& e_list) {
     Physics::ProcessedEntities.clear();
 
-    for (Entity* e : e_list) {
+    for (auto& entity : e_list) {
+        Entity* e = entity.get();
+
         e->isGrounded = false;
 
         if (std::find(Physics::ProcessedEntities.begin(), Physics::ProcessedEntities.end(), e) != Physics::ProcessedEntities.end()) {
@@ -43,7 +45,9 @@ void Physics::CheckEntityCollisions(std::vector<Entity*>& e_list) {
             continue; 
         }; // Dont check collisions for anchored entities FOR NOW; as we only check it for moving hitboxes
 
-        for (Entity* e_other : e_list) {
+        for (auto& entity_other : e_list) {
+            Entity* e_other = entity_other.get();
+
             if (e_other == e) {
                 continue;
             }
@@ -125,32 +129,4 @@ Vec2f Physics::GetMinimumTranslationVector(Hitbox& a_Hitbox, Hitbox& b_Hitbox) {
     } else {
         return Vec2f {0, static_cast<double>(y_overlap)};
     } // Get the "least" colliding axis
-}
-
-
-bool Physics::isGrounded(Entity* e, std::vector<Entity*>& entity_list, float tolerance) {
-    Vec2f position = e->GetPosition();
-    Vec2f size = e->GetSize();
-
-    for (Entity* entity : entity_list) {
-        if (entity == e || !entity->CanCollide || entity->Anchored) {
-            continue;
-        }
-
-        Vec2f entity_position = entity->GetPosition();
-        Vec2f entity_size = entity->GetSize();
-
-        bool isWithinRange_x = (
-            position.x + size.x > entity_position.x && 
-            position.x < entity_position.x + entity_size.x  // Only calculate if the 2 entities are close enough
-        );
-
-        bool isOverlapping_Y = (
-            std::abs((position.y + size.y) - entity_position.y) <= tolerance // check overlapping within a tolerance factor
-        );
-
-        if ( isWithinRange_x && isOverlapping_Y ) return true;
-    }
-
-    return false;
 }

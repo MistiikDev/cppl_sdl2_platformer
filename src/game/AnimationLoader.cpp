@@ -48,7 +48,7 @@ std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(const A
 
     for (const std::string path : animationData.framePaths)
     {
-        SDL_Texture* frame_texture = TextureManager::LoadTexture(path.c_str());
+        std::shared_ptr<SDL_Texture> frame_texture = TextureManager::LoadTexture(path.c_str());
 
         std::cout << "ANIMATION : Loading frame : " << path.c_str() << std::endl;
 
@@ -58,7 +58,7 @@ std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(const A
             continue;
         }
 
-        track->frames.push_back(std::shared_ptr<SDL_Texture>(frame_texture, SDL_DestroyTexture));
+        track->frames.push_back(frame_texture);
     }
 
     std::cout << "ANIMATION : Done loading animation track : " << track->animation.Name << std::endl;

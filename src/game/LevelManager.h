@@ -18,7 +18,6 @@ struct Level {
     std::vector<EntityData> Entities;
 };
 
-class Game;
 class EntityManager;
 class Terrain;
 
@@ -28,8 +27,9 @@ class LevelManager {
 
         std::string GetLevelPath(const std::string& levelName);
 
-        void LoadLevelGeometry(Game* gameInstance);
-        bool LoadLevel(Game* currentGameInstance, const std::string& LevelName);
+        void LoadLevelGeometry();
+        bool LoadLevel(const std::string& LevelName);
+        
         bool UnloadCurrentLevel();
     private:
         EntityManager* currentEntityManager;

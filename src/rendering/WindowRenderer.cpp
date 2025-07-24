@@ -25,16 +25,17 @@ void WindowRenderer::Display() {
     SDL_RenderPresent(this->activeRenderer);
 }
 
-void WindowRenderer::Render(std::vector<Entity*> activeEntities) {
+void WindowRenderer::Render(std::vector<std::unique_ptr<Entity>>& activeEntities) {
 
     // Sort list based off of render layers.
     std::sort(activeEntities.begin(), activeEntities.end(), 
-        [](Entity* a, Entity* b) { 
-            return a->RenderingLayer < b->RenderingLayer; 
+        [](const std::unique_ptr<Entity>& a, const std::unique_ptr<Entity>& b) {
+            return a->RenderingLayer < b->RenderingLayer;
         }
     );
 
-    for (Entity* e : activeEntities) {
+     for (const auto& e : activeEntities) {
+
         SDL_Rect sourceRect, destRect;
         // Source, what pixels are we drawing?
         sourceRect.x = e->GetEntityRenderingBox().x;
@@ -48,9 +49,17 @@ void WindowRenderer::Render(std::vector<Entity*> activeEntities) {
         destRect.w = e->GetEntityRenderingBox().w;
         destRect.h = e->GetEntityRenderingBox().h;
 
-        SDL_Texture* entityTexture = e->GetTexture();
+        SDL_Texture* entityTexture = e->GetTexture().get();
         
-        SDL_RenderCopyEx( this->activeRenderer, entityTexture, &sourceRect, &destRect, e->GetRotation(), e->GetAnchorPoint(), e->GetFacingDirection()  );
+       SDL_RenderCopyEx(
+            this->activeRenderer,
+            entityTexture,
+            &sourceRect,
+            &destRect,
+            e->GetRotation(),
+            e->GetAnchorPoint(),
+            e->GetFacingDirection()
+        );
     }
 }
 

@@ -1,6 +1,6 @@
 #include "EntityManager.h"
+#include "Entity.h"          
 #include "Terrain.h"
-
 
 Terrain::Terrain() {
     noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
@@ -46,12 +46,23 @@ void Terrain::GenerateWorld() {
             localBlockData.Passive = true;
             localBlockData.Class = "WorldBlock";
             localBlockData.Name = "Block";
-            localBlockData.TexturePath = (y == height ? "src/assets/art/blocs/grass.png" : "src/assets/art/blocs/stone.png");
             localBlockData.Position = Vec2f {static_cast<double>(x), static_cast<double>(y)};
 
-            // std::cout << "TERRAIN : Block position : X (" << x << ") / Y(" << y << ")" << std::endl;
+            int salt = rand() % 3; // Random depth factor to choose generation from
 
-            this->entityLoader->CreateEntity(this->gameInstance, localBlockData);
+            if (y == height) {
+                localBlockData.TexturePath = "src/assets/art/blocs/grass.png";
+            
+            } else if (y > height && y < height + (2 + salt) * BLOCK_SIZE)  { 
+                localBlockData.TexturePath = "src/assets/art/blocs/dirt.png"; // 2 as a "magic number" for now, meaning always 2 dirt blocks before any other generation
+            
+            } else {
+                localBlockData.TexturePath = "src/assets/art/blocs/stone.png"; // Too deep, stone
+            }
+
+            std::cout << "TERRAIN : Block position : X (" << x << ") / Y(" << y << ")" << std::endl;
+
+            this->entityLoader->CreateEntity(localBlockData);
         }
     }
 }

@@ -13,8 +13,7 @@
 #include "Animator.h"
 #include "AnimationLoader.h"
 #include "AnimationTrack.h"
-
-#include "TextureManager.h"
+#include "InputManager.h"
 
 #include "EntityData.h"
 #include "Vec2f.h"
@@ -22,8 +21,9 @@
 class Game;
 class Entity {
     public:
-        Entity(Game* game, const EntityData& data, SDL_Texture* texture);
-        ~Entity() { }
+        Entity(Game* game, const EntityData& data, std::shared_ptr<SDL_Texture> texture);
+        
+        virtual ~Entity() = default;
 
         // -- Propreties -- 
 
@@ -68,24 +68,24 @@ class Entity {
         void SetPassive(bool isPassive) {this->isPassive = isPassive;}; // Controls behaviours on entity updates.
 
         void SetDirectionFacing(SDL_RendererFlip newFlip) { this->DirectionFacing = newFlip; };
-        void SetAnchorPoint(SDL_Point* anchorPoint) { this->AnchordPoint = anchorPoint; };
-        void SetTexture(SDL_Texture* texture) { this->Texture = texture; };
+        void SetAnchorPoint(SDL_Point anchorPoint) { this->AnchordPoint = anchorPoint; };
+        void SetTexture(std::shared_ptr<SDL_Texture> texture) { this->Texture = texture; };
         void SetEntityRenderingBounds(SDL_Rect& boundingBox) { this->BoundingBox = boundingBox; }
         
         void ResetTextureDefault() { this->Texture = this->DefaultTexture; };
 
-        SDL_Texture* GetTexture() { return Texture; };
-        SDL_Point* GetAnchorPoint() { return this->AnchordPoint; };
+        std::shared_ptr<SDL_Texture> GetTexture() { return Texture; };
+        SDL_Point* GetAnchorPoint() { return &this->AnchordPoint; };
 
         SDL_RendererFlip GetFacingDirection() { return this->DirectionFacing; };
-        SDL_Rect& GetEntityRenderingBox() { return BoundingBox; };
+        SDL_Rect GetEntityRenderingBox() { return BoundingBox; };
 
         virtual void Awake();
         virtual void Update(float deltaTime);
 
         // -- Animation -- 
 
-        Animator* animator;
+        std::unique_ptr<Animator> animator;
         
         std::map<std::string, std::unique_ptr<AnimationTrack>> LoadedAnimations;
     protected:
@@ -94,18 +94,19 @@ class Entity {
 
     private:
         double Mass;
-
+        int Rotation;
+        
         Vec2f Position;
         Vec2f Velocity;
         Vec2f Acceleration;
 
-        int Rotation;
         SDL_Rect BoundingBox;
         SDL_RendererFlip DirectionFacing;
 
-        SDL_Point* AnchordPoint;
-        SDL_Texture* DefaultTexture;
-        SDL_Texture* Texture;
+        SDL_Point AnchordPoint;
+
+        std::shared_ptr<SDL_Texture> DefaultTexture;
+        std::shared_ptr<SDL_Texture> Texture;
 };
 
 #endif

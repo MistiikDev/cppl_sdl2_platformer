@@ -4,29 +4,33 @@
 #include <vector>
 #include <SDL2/SDL.h>
 #include <unordered_map>
+#include <memory>
+
+#include "Entity.h"
+#include "Player.h"
 #include "EntityData.h"
-#include "TextureManager.h"
+
+#include "Physics.h"
 
 class Game;
-class Entity;
-class Player;
 
 class EntityManager {
     public:
-        EntityManager();
+        EntityManager(Game* currentGameInstance);
         
-        Entity* CreateEntity(Game* currentGameInstance, EntityData& entityData);
-        Player* CreatePlayer(Game* currentGameInstance, EntityData& entityData);
+        std::unique_ptr<Entity> CreateEntity(EntityData& entityData);
+        std::unique_ptr<Player> CreatePlayer(EntityData& entityData);
 
         void UpdateEntities(float deltaTime);
         void ClearEntities();
 
         void Quit();
 
-        std::vector<Entity*>& GetActiveEntities() { return activeEntities; };
+        std::vector<std::unique_ptr<Entity>>& GetActiveEntities() { return activeEntities; };
     
     private:
-        std::vector<Entity*> activeEntities; // Textures to be rendered;
+        Game* currentGameInstance;
+        std::vector<std::unique_ptr<Entity>> activeEntities; // Textures to be rendered;
 };
 
 

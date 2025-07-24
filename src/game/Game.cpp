@@ -3,7 +3,6 @@
 #include "LevelManager.h"
 #include "AudioManager.h"
 #include "AnimationLoader.h"
-#include "TextureManager.h"
 #include "EntityManager.h"
 
 #include "Game.h"
@@ -25,24 +24,26 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
     );
     
     assert(activeWindow != NULL && "Error while creating window!");
-
     this->Running = true;
     this->Window = activeWindow;
+    this->AppRenderer = new WindowRenderer { this->Window, SDL_RENDERER_ACCELERATED, LOGICAL_WIDTH, LOGICAL_HEIGTH };
 
-    AnimationLoader::Init(this->AppRenderer->GetRenderer());
+    // Create the rendering box, and start rendering to the screen
+
+    SDL_Renderer* Renderer = this->AppRenderer->GetRenderer();
+
+    AnimationLoader::Init(Renderer);
     AudioManager::Init();
-    TextureManager::Init(this->AppRenderer->GetRenderer());
+    TextureManager::Init(Renderer);
 
     AnimationLoader::LoadAnimDefinitions("src/assets/data/entity_animations.json");
     AudioManager::PreloadAudioFiles("src/assets/data/sound.json");
+    this->entityManager = new EntityManager { this };
 
-
-    // Create the rendering box, and start rendering to the screen
-    this->_InputManager = new InputManager { };
-    this->AppRenderer = new WindowRenderer { this->Window, SDL_RENDERER_ACCELERATED, LOGICAL_WIDTH, LOGICAL_HEIGTH };
     this->levelManager = new LevelManager { this->entityManager };
+    this->levelManager->LoadLevel("level1");
 
-    this->levelManager->LoadLevel(this, "level1");
+    this->_InputManager = new InputManager { };
 
     //
     this->Run();

@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "Entity.h"
 
-Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) : 
+Entity::Entity(Game *game, const EntityData &data, std::shared_ptr<SDL_Texture> texture) : 
     CurrentGameInstance(game),                               
     Position(data.Position),                                                                     
     Mass(data.Mass),                                                                        
@@ -20,9 +20,8 @@ Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) :
 
     TextureManager::QueryTexture(this->Texture, &BoundingBox.w, &BoundingBox.h); // Set BoundingBox data
 
-    this->AnchordPoint = new SDL_Point();
-    this->AnchordPoint->x = BoundingBox.w / 2;
-    this->AnchordPoint->y = BoundingBox.h / 2; // Set as default
+    this->AnchordPoint.x = BoundingBox.w / 2;
+    this->AnchordPoint.y = BoundingBox.h / 2; // Set as default
 
     Rotation = 0;
     DirectionFacing = SDL_FLIP_NONE;
@@ -33,7 +32,7 @@ Entity::Entity(Game *game, const EntityData &data, SDL_Texture *texture) :
 
 void Entity::Awake()
 {    
-    this->animator = new Animator{this};
+    this->animator = std::make_unique<Animator>(this);
    
     auto it = AnimationLoader::AnimationPackage.find(this->ClassName);
     
@@ -41,7 +40,7 @@ void Entity::Awake()
         std::cerr << "No animation package found for class: " << this->ClassName << std::endl;
         return;
     }
-
+    
     for (const AnimationData& data : it->second) {
         std::unique_ptr<AnimationTrack> track = AnimationLoader::LoadTrackFromDefinition(data, this);
 
