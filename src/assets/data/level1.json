@@ -17,7 +17,8 @@
             {
                 "Name": "Player1",
                 "Class": "Player",
-                "Position": [100, 0],
+                "Position": [960, 0], 
+                
                 "Mass": 100,
                 "Anchored": false,
                 "CanCollide": true,

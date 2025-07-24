@@ -19,7 +19,7 @@ class WindowRenderer {
         SDL_Renderer* GetRenderer();
 
         void Display();
-        void Render(std::vector<std::unique_ptr<Entity>>& renderObjects);
+        void Render(std::vector<std::shared_ptr<Entity>>& renderObjects);
         void ClearViewport();
 
         void SetViewportSize(int newWidth, int newHeight);

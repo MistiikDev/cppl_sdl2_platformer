@@ -44,7 +44,8 @@ class Entity {
 
         // -- Physics -- 
         
-        void SetPosition(Vec2f& position);
+        
+        void SetPosition(Vec2f& position, bool stayInBounds);
         void SetVelocity(const Vec2f& velocity) { this->Velocity = velocity; }; 
         void SetAcceleration(const Vec2f& acceleration) { this->Acceleration = acceleration; };
         void SetRotation(int Rotation) { this->Rotation = Rotation; };

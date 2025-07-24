@@ -25,11 +25,11 @@ void WindowRenderer::Display() {
     SDL_RenderPresent(this->activeRenderer);
 }
 
-void WindowRenderer::Render(std::vector<std::unique_ptr<Entity>>& activeEntities) {
+void WindowRenderer::Render(std::vector<std::shared_ptr<Entity>>& activeEntities) {
 
     // Sort list based off of render layers.
     std::sort(activeEntities.begin(), activeEntities.end(), 
-        [](const std::unique_ptr<Entity>& a, const std::unique_ptr<Entity>& b) {
+        [](const std::shared_ptr<Entity>& a, const std::shared_ptr<Entity>& b) {
             return a->RenderingLayer < b->RenderingLayer;
         }
     );

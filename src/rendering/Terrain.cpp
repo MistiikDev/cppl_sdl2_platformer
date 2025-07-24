@@ -7,6 +7,12 @@ Terrain::Terrain() {
     noise.SetFrequency(0.003f); // Hardcoded for now;
     noise.SetSeed(static_cast<int>(time(NULL)));
 
+    defaultBlockData.Anchored = true;
+    defaultBlockData.CanCollide = true;
+    defaultBlockData.Passive = true;
+    defaultBlockData.Class = "WorldBlock";
+    defaultBlockData.Name = "Block";
+
     std::cout << "TERRAIN : Generation ready" << std::endl;
 }
 
@@ -40,24 +46,20 @@ void Terrain::GenerateWorld() {
 
         for (int y = height; y < 1080; y += BLOCK_SIZE) {
             
-            EntityData localBlockData;
-            localBlockData.Anchored = true;
-            localBlockData.CanCollide = true;
-            localBlockData.Passive = true;
-            localBlockData.Class = "WorldBlock";
-            localBlockData.Name = "Block";
+            EntityData localBlockData = this->defaultBlockData; // Make a copy of the existing default template.
+
             localBlockData.Position = Vec2f {static_cast<double>(x), static_cast<double>(y)};
 
-            int salt = rand() % 3; // Random depth factor to choose generation from
+            int salt = rand() % 5; // Random depth factor to choose generation from
 
             if (y == height) {
                 localBlockData.TexturePath = "src/assets/art/blocs/grass.png";
             
-            } else if (y > height && y < height + (2 + salt) * BLOCK_SIZE)  { 
-                localBlockData.TexturePath = "src/assets/art/blocs/dirt.png"; // 2 as a "magic number" for now, meaning always 2 dirt blocks before any other generation
+            } else if (y > height && y < height + (MINIMUM_DIRT_DEPTH + salt) * BLOCK_SIZE)  { 
+                localBlockData.TexturePath = "src/assets/art/blocs/dirt.png";
             
             } else {
-                localBlockData.TexturePath = "src/assets/art/blocs/stone.png"; // Too deep, stone
+                localBlockData.TexturePath = "src/assets/art/blocs/stone.png";
             }
 
             std::cout << "TERRAIN : Block position : X (" << x << ") / Y(" << y << ")" << std::endl;

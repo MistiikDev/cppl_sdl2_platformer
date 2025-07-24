@@ -35,7 +35,6 @@ void Entity::Awake()
     this->animator = std::make_unique<Animator>(this);
    
     auto it = AnimationLoader::AnimationPackage.find(this->ClassName);
-    
     if (it == AnimationLoader::AnimationPackage.end()) {
         std::cerr << "No animation package found for class: " << this->ClassName << std::endl;
         return;
@@ -48,9 +47,11 @@ void Entity::Awake()
             this->LoadedAnimations[data.Name] = std::move(track);
         }
     }
+
+    std::cout << this->ClassName << std::endl;
 }
 
-void Entity::SetPosition(Vec2f &newposition)
+void Entity::SetPosition(Vec2f &newposition, bool stayInBounds = true)
 {
     int w = this->BoundingBox.w;
     int h = this->BoundingBox.h;
@@ -59,8 +60,9 @@ void Entity::SetPosition(Vec2f &newposition)
     this->CurrentGameInstance->GetLogicalWindowSize(screen_w, screen_h);
 
     // new position.coord = clamp(0, screen_width - player_width, coord); -> screen_width - player_width = account for texture thickness!
-    newposition.x = std::max(0.0, std::min((double)(screen_w - w), newposition.x));
-    newposition.y = std::max(0.0, std::min((double)(screen_h - h), newposition.y));
+
+    newposition.x = (stayInBounds ? std::max(0.0, std::min((double)(screen_w - w), newposition.x)) : newposition.x);
+    newposition.y = (stayInBounds ? std::max(0.0, std::min((double)(screen_h - h), newposition.y)) : newposition.y);
 
     this->Position = newposition;
 }
@@ -81,7 +83,7 @@ void Entity::Push(Vec2f &push_vector, float speed)
         float t = static_cast<float>(i) / 100.0f;
         Vec2f lerpedPosition = startPosition.Lerp(targetPosition, t);
 
-        this->SetPosition(lerpedPosition);
+        this->SetPosition(lerpedPosition, true);
     }
 
     this->isPushing = false;
@@ -89,6 +91,6 @@ void Entity::Push(Vec2f &push_vector, float speed)
 
 void Entity::Update(float deltaTime) {
     if (this->isPassive) return;
-
+    
     this->animator->UpdateAnimations(deltaTime);
 }

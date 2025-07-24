@@ -18,19 +18,21 @@ class EntityManager {
     public:
         EntityManager(Game* currentGameInstance);
         
-        std::unique_ptr<Entity> CreateEntity(EntityData& entityData);
-        std::unique_ptr<Player> CreatePlayer(EntityData& entityData);
+        std::shared_ptr<Entity> CreateEntity(EntityData& entityData);
+        std::shared_ptr<Player> CreatePlayer(EntityData& entityData);
 
         void UpdateEntities(float deltaTime);
         void ClearEntities();
+        
+        std::shared_ptr<Player> localPlayer;
 
         void Quit();
 
-        std::vector<std::unique_ptr<Entity>>& GetActiveEntities() { return activeEntities; };
+        std::vector<std::shared_ptr<Entity>>& GetActiveEntities() { return activeEntities; };
     
     private:
         Game* currentGameInstance;
-        std::vector<std::unique_ptr<Entity>> activeEntities; // Textures to be rendered;
+        std::vector<std::shared_ptr<Entity>> activeEntities; // Textures to be rendered;
 };
 
 

@@ -24,12 +24,16 @@ void Physics::UpdatePositionInWorld(Entity* e, float deltaTime) {
 
     e->SetAcceleration(Acceleration);
     e->SetVelocity(Velocity);
-    e->SetPosition(newPosition);
 
+    if (e->ClassName == "Player") {
+        newPosition.x = e->GetPosition().x; // Hardcoded for now, TODO: Add possibility of locking an axis for physics computations;
+    }
+
+    e->SetPosition(newPosition, true);
     e->SetAcceleration(Vec2f::zero);
 }
 
-void Physics::CheckEntityCollisions(std::vector<std::unique_ptr<Entity>>& e_list) {
+void Physics::CheckEntityCollisions(std::vector<std::shared_ptr<Entity>>& e_list) {
     Physics::ProcessedEntities.clear();
 
     for (auto& entity : e_list) {

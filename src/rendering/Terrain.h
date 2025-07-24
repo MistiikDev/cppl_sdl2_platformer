@@ -15,6 +15,8 @@
 #define WORLD_WIDTH 1920
 #define BLOCK_SIZE 32
 
+#define MINIMUM_DIRT_DEPTH 2
+
 class EntityManager;
 class Terrain {
     public:
@@ -31,6 +33,7 @@ class Terrain {
         void ClearWorld();
         void GenerateWorld();
     private:
+        EntityData defaultBlockData;
         EntityManager* entityLoader;
         FastNoiseLite noise;
 };
