@@ -35,6 +35,7 @@ void WindowRenderer::Render(std::vector<std::shared_ptr<Entity>>& activeEntities
     );
 
      for (const auto& e : activeEntities) {
+        if (!e->isActive) continue;
 
         SDL_Rect sourceRect, destRect;
         // Source, what pixels are we drawing?
@@ -51,8 +52,6 @@ void WindowRenderer::Render(std::vector<std::shared_ptr<Entity>>& activeEntities
 
         SDL_Texture* entityTexture = e->GetTexture().get();
         
-        if (!e->isActive) continue;
-
         SDL_RenderCopyEx(
                 this->activeRenderer,
                 entityTexture,

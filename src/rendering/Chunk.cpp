@@ -31,52 +31,40 @@ void Chunk::Generate() {
     this->chunkNoise.SetFrequency(this->chunkSmoothness);
     this->chunkNoise.SetSeed(static_cast<int>(time(NULL)));
 
-    for (int x = this->Position.x; x < chunkWidth; x += BLOCK_SIZE) {
-        float x_float = static_cast<float>(x);
-        float localNoise = this->chunkNoise.GetNoise(x_float, 0.0f); // Between -1 and 1
+    for (int x = 0; x < chunkWidth; x += BLOCK_SIZE) {
+        int worldX = this->Position.x + x;
+        float x_float = static_cast<float>(worldX);
+        float localNoise = this->chunkNoise.GetNoise(x_float, 0.0f);
 
         float localNoiseNormal = (localNoise + 1.0f) / 2.0f;
 
         int height = static_cast<int>(WORLD_HEIGHT_MIN + (localNoiseNormal * HeigthAmplitude));
-
-        // clamp height between
         height -= height % BLOCK_SIZE;
 
-        if (height < WORLD_HEIGHT_MIN)
-            height = WORLD_HEIGHT_MIN;
-        if (height > WORLD_HEIGHT_MAX)
-            height = WORLD_HEIGHT_MAX;
+        if (height < WORLD_HEIGHT_MIN) height = WORLD_HEIGHT_MIN;
+        if (height > WORLD_HEIGHT_MAX) height = WORLD_HEIGHT_MAX;
 
         std::vector<int> y_depth;
 
-        for (int y = 0; y < height; y+=BLOCK_SIZE) {
+        for (int y = 0; y < height; y += BLOCK_SIZE)
             y_depth.push_back(BlockType::Air);
-        }
 
         int blockDepth = 0;
 
-        for (int y = height; y < chunkHeigth; y += BLOCK_SIZE) { // make y start at 0 ? account for air blocks, makes full chunks
-            std::cout << "CHUNK GENERATION : Block position : X (" << x << ") / Y(" << y << ")" << std::endl;
-
-            int salt = rand() % 5; // Random depth factor to choose generation from
+        for (int y = height; y < chunkHeigth; y += BLOCK_SIZE) {
             BlockType block;
-
-            if (blockDepth == 0) {
+            if (blockDepth == 0)
                 block = BlockType::Grass;
-
-            } else if (blockDepth <= MINIMUM_DIRT_DEPTH + (rand() % 3)) {
+            else if (blockDepth <= MINIMUM_DIRT_DEPTH + (rand() % 3))
                 block = BlockType::Dirt;
-
-            } else {
+            else
                 block = BlockType::Stone;
-            }
 
             y_depth.push_back(block);
-
-            blockDepth ++;
+            blockDepth++;
         }
 
-        this->chunkData[x] = y_depth;
+        this->chunkData[worldX] = y_depth;
     }
 
     this->isGenerated = true;
@@ -134,28 +122,14 @@ void Chunk::Load(EntityManager* entityManager) {
             localBlockData.Position.print();
             
             if (this->renderedBlocks[localBlockData.ID]) {
-                std::cout << "CHUNK LOADING: Culling Block" << std::endl;
+                //std::cout << "CHUNK LOADING: Culling Block" << std::endl;
+                
                 this->renderedBlocks[localBlockData.ID]->isActive = true;
             } else {
-                std::cout << "CHUNK LOADING: Creating Block" << std::endl;
-                std::shared_ptr<Entity> block = entityManager->CreateEntity(localBlockData);
-                this->renderedBlocks[localBlockData.ID] = block;
+                //std::cout << "CHUNK LOADING: Creating Block" << std::endl;
+                
+                this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);;
             }
-
-            // auto it = std::find_if(this->renderedBlocks.begin(), this->renderedBlocks.end(), 
-            //     [&localBlockData](const std::shared_ptr<Entity>& entityA) {
-            //         return localBlockData.ID == entityA->ID;
-            // });
-
-            // if (it != this->renderedBlocks.end()) {
-            //     std::cout << "CHUNK LOADING : Reactivating Entity" << std::endl;
-            //     it->get()->isActive = true; // Set already existing entity to load;
-            // } else {
-            //     std::shared_ptr<Entity> block = entityManager->CreateEntity(localBlockData);
-            //     block->isActive = true;
-
-            //     this->renderedBlocks.push_back(block);
-            // }
 
             y += BLOCK_SIZE;
         }

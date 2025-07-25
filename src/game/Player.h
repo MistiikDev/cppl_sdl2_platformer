@@ -24,8 +24,14 @@ class Player : public Entity {
 
         bool isDashing = false;
 
+        Vec2f RealWorldPosition;
         Vec2f JumpVector { 0, -250 };
+
         std::string jump_sfx =  "jump_sfx";
+
+        Vec2f GetRealWorldPosition() {
+            return this->RealWorldPosition; // Original offset
+        };
 
         void Awake();
         void Update(float deltaTime);

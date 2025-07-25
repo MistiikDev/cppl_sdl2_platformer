@@ -43,12 +43,10 @@ bool LevelManager::LoadLevel(const std::string& levelName) {
         return false;
     }
 
-    EntityData playerData;
-
     std::string LevelPath = this->GetLevelPath(levelName);
     std::ifstream f(LevelPath);
 
-
+    EntityData playerData;
     json levelData;
 
     if (!f.is_open()) {
@@ -82,10 +80,12 @@ bool LevelManager::LoadLevel(const std::string& levelName) {
         entity.Anchored = e["Anchored"];
         entity.CanCollide = e["CanCollide"];
         entity.TexturePath = e["TexturePath"];
-        entity.isScrollable = e.value("isScrollable", true);
+        entity.isScrollable = e["isScrollable"];
 
         entity.RenderingGroup = e["RenderingGroup"];
         entity.RenderingLayer = e.value("RenderLayer", 0);
+
+        std::cout << "LEVEL: Entity is : " << (entity.isScrollable ? "SCROLLABLE" : "NOT SCROLLABLE") << std::endl;
 
         CurrentLevel.Entities.push_back(entity);
 

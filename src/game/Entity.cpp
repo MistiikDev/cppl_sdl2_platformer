@@ -12,7 +12,8 @@ Entity::Entity(Game *game, const EntityData &data, std::shared_ptr<SDL_Texture> 
     Anchored(data.Anchored),                                       
     CanCollide(data.CanCollide),
     Name(data.Name),
-    isPassive(data.Passive)
+    isPassive(data.Passive),
+    isScrollable(data.isScrollable)
 {
     BoundingBox.x = 0;
     BoundingBox.y = 0;

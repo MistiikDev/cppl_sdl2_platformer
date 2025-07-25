@@ -62,12 +62,13 @@ void EntityManager::UpdateEntities(float deltaTime) {
 
     if (this->localPlayer != nullptr) {
         playerNewPos = this->localPlayer->GetPosition();
-        
+
         Vec2f displacement = playerNewPos - playerPrevPos;
+        this->localPlayer->RealWorldPosition = this->localPlayer->RealWorldPosition + displacement;
 
         playerPrevPos.y = playerNewPos.y; // Let the player update its y position (jumps...)
         displacement.y = 0; // Lock player X-Axis
-
+        
         this->localPlayer->SetPosition(playerPrevPos, false);
 
         for (auto& entity : this->activeEntities) {

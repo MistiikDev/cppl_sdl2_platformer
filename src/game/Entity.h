@@ -71,7 +71,7 @@ class Entity {
         // -- Rendering --
 
         bool isActive = true;
-        bool isScrollable = true;
+        bool isScrollable;
 
         void SetPassive(bool isPassive) {this->isPassive = isPassive;}; // Controls behaviours on entity updates.
 

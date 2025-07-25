@@ -25,7 +25,8 @@
                 "CanCollide": true,
                 "TexturePath": "src/assets/art/sprites/player/player_sprite_sized.png",
                 "RenderingGroup": "",
-                "RenderLayer": 1
+                "RenderLayer": 1,
+                "isScrollable": false
             }
         ],
         
