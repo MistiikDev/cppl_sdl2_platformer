@@ -16,21 +16,26 @@ std::string LevelManager::GetLevelPath(const std::string& levelName) {
     return path;
 }
 
-bool LevelManager::UnloadCurrentLevel() {
-    std::cout << "LEVEL: Unloading active level" << std::endl;
-        
+bool LevelManager::UnloadCurrentLevel() {        
     this->currentEntityManager->ClearEntities();
     this->CurrentLevel = Level();
+
+    std::cout << "LEVEL : Unloaded Active Level (IF ANY)" << std::endl;
 
     return true;
 }
 
-void LevelManager::LoadLevelGeometry() {
+void LevelManager::LoadLevelGeometry(const Vec2f& playerInitialPosition) {
     std::cout << "LEVEL : Loading Level Geometry" << std::endl;
 
     this->terrainGenerator->SetEntityLoader(this->currentEntityManager);
     this->terrainGenerator->GenerateWorld();
+    this->terrainGenerator->Update(playerInitialPosition);
 };
+
+void LevelManager::UpdateTerrain() {
+    this->terrainGenerator->Update(Vec2f::zero);
+}
 
 bool LevelManager::LoadLevel(const std::string& levelName) {
     if (!this->UnloadCurrentLevel()) {
@@ -38,14 +43,11 @@ bool LevelManager::LoadLevel(const std::string& levelName) {
         return false;
     }
 
-    std::cout << "LEVEL : Unloaded Active Level (IF ANY)" << std::endl;
-
-    this->LoadLevelGeometry();
+    EntityData playerData;
 
     std::string LevelPath = this->GetLevelPath(levelName);
     std::ifstream f(LevelPath);
 
-    std::cout << "LEVEL: Loading level from path: " << LevelPath << std::endl;
 
     json levelData;
 
@@ -80,14 +82,15 @@ bool LevelManager::LoadLevel(const std::string& levelName) {
         entity.Anchored = e["Anchored"];
         entity.CanCollide = e["CanCollide"];
         entity.TexturePath = e["TexturePath"];
+        entity.isScrollable = e.value("isScrollable", true);
 
         entity.RenderingGroup = e["RenderingGroup"];
-        entity.RenderingLayer = entity.RenderingLayer = e.value("RenderLayer", 0);
+        entity.RenderingLayer = e.value("RenderLayer", 0);
 
         CurrentLevel.Entities.push_back(entity);
 
         if (entity.Class == "Player") {
-            this->currentEntityManager->CreatePlayer(entity);
+            playerData = entity; // Dont spawn player YET;
         } else if (entity.Class == "Entity") {
             this->currentEntityManager->CreateEntity(entity);
         } else {
@@ -101,6 +104,11 @@ bool LevelManager::LoadLevel(const std::string& levelName) {
 
         AudioManager::PlayAudio(musicName, musicVolume);
     }
+    
+    this->LoadLevelGeometry(playerData.Position);
+    this->currentEntityManager->CreatePlayer(playerData);
+
+    std::cout << "LEVEL: Loaded level metadata from path: " << LevelPath << std::endl;
 
     return true;
 }

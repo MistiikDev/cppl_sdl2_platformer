@@ -29,9 +29,6 @@ void Physics::UpdatePositionInWorld(Entity* e, float deltaTime) {
     //     newPosition.x = e->GetPosition().x; // Hardcoded for now, TODO: Add possibility of locking an axis for physics computations;
     // }
 
-    std::cout << "New Position : ";
-    newPosition.print();
-
     e->SetPosition(newPosition, true);
     e->SetAcceleration(Vec2f::zero);
 }

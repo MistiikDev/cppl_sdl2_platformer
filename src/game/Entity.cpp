@@ -14,12 +14,13 @@ Entity::Entity(Game *game, const EntityData &data, std::shared_ptr<SDL_Texture> 
     Name(data.Name),
     isPassive(data.Passive)
 {
-
     BoundingBox.x = 0;
     BoundingBox.y = 0;
 
     TextureManager::QueryTexture(this->Texture, &BoundingBox.w, &BoundingBox.h); // Set BoundingBox data
-
+    
+    this->ID = data.ID ? data.ID : static_cast<uint64_t>(Position.x) << 32 | static_cast<uint32_t>(Position.y);; // Generate Random ID if not already specified;
+    
     this->AnchordPoint.x = BoundingBox.w / 2;
     this->AnchordPoint.y = BoundingBox.h / 2; // Set as default
 
@@ -27,7 +28,7 @@ Entity::Entity(Game *game, const EntityData &data, std::shared_ptr<SDL_Texture> 
     DirectionFacing = SDL_FLIP_NONE;
     ClassName = (ClassName.empty() ? ClassName : "Generic_Entity");
 
-    std::cout << "ENTITY : Loaded Entity : '" << this->Name << "' of Class : '" << this->ClassName << "'" << std::endl; 
+    std::cout << "ENTITY : Loaded Entity : '" << this->Name << "' with ID : " << this->ID << std::endl;
 };
 
 void Entity::Awake()

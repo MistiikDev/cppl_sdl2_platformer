@@ -1,3 +1,8 @@
+#ifndef CHUNK_H
+#define CHUNK_H
+
+#pragma once
+
 #include <vector>
 #include <map>
 #include <iostream>
@@ -12,24 +17,31 @@
 #define WORLD_HEIGHT_MAX 1000
 
 #define BLOCK_SIZE 32
+#define CHUNK_SIZE_X 32 // Chunk Width In Pixels
+#define CHUNK_SIZE_Y 34 // Chunk Heigth In Pixels
+
 #define MINIMUM_DIRT_DEPTH 2
+
+extern int chunkWidth; 
+extern int chunkHeigth;
 
 struct Chunk {
     float chunkSmoothness = 0.003f;
     bool isLoaded = false;
+    bool isGenerated = false;
+
     bool isVisibleToPlayer(Vec2f& playerPosition);
 
-    unsigned int chunkSizeInBlocks_X = 32; // In terms of blocks, meaning its buffering 32 * 32 = 1024 pixels
-    unsigned int chunkSizeInBlocks_Y = 64;
-
     void Generate();
-    void LoadEntities(EntityManager* entityManager);
+    void Load(EntityManager* entityManager);
     void UnloadEntities(EntityManager* entityManager);
 
     std::map<int, std::vector<int>> chunkData;
-    std::vector<std::shared_ptr<Entity>> renderedBlocks;
+    std::unordered_map<uint64_t, std::shared_ptr<Entity>> renderedBlocks;
 
     Vec2f Position;
     FastNoiseLite chunkNoise;
     EntityData defaultBlockData;
 };
+
+#endif

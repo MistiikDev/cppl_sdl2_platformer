@@ -90,6 +90,8 @@ void Game::Run() {
         this->AppRenderer->Render(this->entityManager->GetActiveEntities());
         this->AppRenderer->Display();
 
+        this->levelManager->UpdateTerrain();
+
         SDL_Delay((Uint32)(1000.0f / 144.0f)); // Cap at 144Hz
     }
 }

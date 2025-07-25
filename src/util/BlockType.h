@@ -3,7 +3,7 @@
 
 #pragma once
 
-enum class BlockType {
+enum BlockType {
     Air,
     Grass,
     Dirt,

@@ -12,12 +12,13 @@
                 "CanCollide": false,
                 "TexturePath": "src/assets/art/background/day_background.jpg",
                 "RenderingGroup": "",
-                "RenderLayer": -1
+                "RenderLayer": -1,
+                "isScrollable": false
             },
             {
                 "Name": "Player1",
                 "Class": "Player",
-                "Position": [960, 0], 
+                "Position": [960, 20], 
                 
                 "Mass": 100,
                 "Anchored": false,

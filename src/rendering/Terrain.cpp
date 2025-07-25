@@ -2,25 +2,24 @@
 #include "Entity.h"          
 #include "Terrain.h"
 
+#include "ChunkManager.h"
+
 Terrain::Terrain() {
-    noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-    noise.SetFrequency(0.003f); // Hardcoded for now;
-    noise.SetSeed(static_cast<int>(time(NULL)));
-
     std::cout << "TERRAIN : Generation ready" << std::endl;
-}
-
-void Terrain::ClearWorld() {
-
 }
 
 void Terrain::GenerateWorld() {
     std::cout << "TERRAIN : Starting Generation" << std::endl;
+    this->isGenerating = true;
+}
 
-    int TotalWidthBlocs = (int)(1920 / BLOCK_SIZE);
-    float HeigthAmplitude = (WORLD_HEIGHT_MAX - WORLD_HEIGHT_MIN) / 2;
+void Terrain::Update(const Vec2f& playerInitialPosition) {
+    if (!(playerInitialPosition == Vec2f::zero)) {
+        ChunkManager::UpdateTerrain(this->entityLoader, playerInitialPosition);
+    } else {
+        if (!this->isGenerating) return;
+        if (!this->entityLoader || !this->entityLoader->localPlayer) return;
 
-    std::cout << "TERRAIN : " << TotalWidthBlocs << " total blocks in queue" << std::endl;
-
-    
+        ChunkManager::UpdateTerrain(this->entityLoader, Vec2f::zero);
+    }
 }

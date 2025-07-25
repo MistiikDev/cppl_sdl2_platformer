@@ -9,10 +9,12 @@ struct EntityData {
     std::string Class;
     Vec2f Position;
 
+    uint32_t ID;
+
     double Mass;
     bool Anchored;
     bool CanCollide;
-
+    bool isScrollable;
     bool Passive;
 
     std::string TexturePath;

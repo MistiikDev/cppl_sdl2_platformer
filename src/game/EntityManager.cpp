@@ -72,7 +72,7 @@ void EntityManager::UpdateEntities(float deltaTime) {
 
         for (auto& entity : this->activeEntities) {
             Entity* e = entity.get();
-            if (e == this->localPlayer.get()) continue;
+            if (e == this->localPlayer.get() || !e->isScrollable) continue;
 
             Vec2f centeredOffsetPosition = e->GetPosition() - (displacement); // Offset every other entity by the opposite of deltaPlayer displacement
             

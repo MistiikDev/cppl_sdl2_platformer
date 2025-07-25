@@ -27,6 +27,8 @@ class Entity {
 
         // -- Propreties -- 
 
+        uint32_t ID;
+
         bool Anchored;
         bool CanCollide;
         bool isPushing = false;
@@ -67,6 +69,9 @@ class Entity {
         }
 
         // -- Rendering --
+
+        bool isActive = true;
+        bool isScrollable = true;
 
         void SetPassive(bool isPassive) {this->isPassive = isPassive;}; // Controls behaviours on entity updates.
 

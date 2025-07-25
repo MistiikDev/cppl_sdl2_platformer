@@ -22,16 +22,18 @@ class Terrain {
     public:
         Terrain();
 
+        bool isGenerating;
+
         void SetEntityLoader(EntityManager* _entityLoader) {
             std::cout << "Loading Entity Loader" << std::endl;
             this->entityLoader = _entityLoader;
 
             std::cout << "Loaded Entity Loader" << std::endl;
         }
-
-        void SetSeed(uint64_t seed);
+        
         void ClearWorld();
         void GenerateWorld();
+        void Update(const Vec2f& playerInitialPosition);
     private:
         EntityData defaultBlockData;
         EntityManager* entityLoader;

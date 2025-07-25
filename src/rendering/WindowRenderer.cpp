@@ -51,15 +51,17 @@ void WindowRenderer::Render(std::vector<std::shared_ptr<Entity>>& activeEntities
 
         SDL_Texture* entityTexture = e->GetTexture().get();
         
-       SDL_RenderCopyEx(
-            this->activeRenderer,
-            entityTexture,
-            &sourceRect,
-            &destRect,
-            e->GetRotation(),
-            e->GetAnchorPoint(),
-            e->GetFacingDirection()
-        );
+        if (!e->isActive) continue;
+
+        SDL_RenderCopyEx(
+                this->activeRenderer,
+                entityTexture,
+                &sourceRect,
+                &destRect,
+                e->GetRotation(),
+                e->GetAnchorPoint(),
+                e->GetFacingDirection()
+            );
     }
 }
 

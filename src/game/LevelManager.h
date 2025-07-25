@@ -27,9 +27,10 @@ class LevelManager {
 
         std::string GetLevelPath(const std::string& levelName);
 
-        void LoadLevelGeometry();
+        void LoadLevelGeometry(const Vec2f& playerInitialPosition);
+        void UpdateTerrain();
+
         bool LoadLevel(const std::string& LevelName);
-        
         bool UnloadCurrentLevel();
     private:
         EntityManager* currentEntityManager;
