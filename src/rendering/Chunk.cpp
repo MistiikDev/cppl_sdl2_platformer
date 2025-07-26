@@ -100,14 +100,7 @@ void Chunk::Load(EntityManager* entityManager) {
 
         for (int block_type : y_depth) {
             EntityData localBlockData = this->defaultBlockData;
-
-            localBlockData.Anchored = true;
-            localBlockData.Passive = true;
-            localBlockData.fixedToCamera = false;
             
-            localBlockData.Class = "WorldBlock";
-            localBlockData.Name = "Block";
-
             localBlockData.ID = pair(x, y);
             localBlockData.Position = Vec2f{static_cast<double>(x), static_cast<double>(y)};
 
@@ -139,16 +132,16 @@ void Chunk::Load(EntityManager* entityManager) {
                 }
             }
 
-            //this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);
-            if (this->renderedBlocks[localBlockData.ID]) {
-                //std::cout << "CHUNK LOADING: Culling Block" << std::endl;
+            this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);
+            // if (this->renderedBlocks[localBlockData.ID]) {
+            //     //std::cout << "CHUNK LOADING: Culling Block" << std::endl;
                 
-                this->renderedBlocks[localBlockData.ID]->isActive = true;
-            } else {
-                //std::cout << "CHUNK LOADING: Creating Block" << std::endl;
+            //     this->renderedBlocks[localBlockData.ID]->isActive = true;
+            // } else {
+            //     //std::cout << "CHUNK LOADING: Creating Block" << std::endl;
                 
-                this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);;
-            }
+            //     this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);;
+            // }
 
             y += BLOCK_SIZE;
         }
@@ -166,7 +159,7 @@ void Chunk::UnloadEntities(EntityManager* entityManager) {
 
         entityManager->ClearEntity(block); 
 
-        block->isActive = false;
+        //block->isActive = false;
     }
 
     this->isLoaded = false;
