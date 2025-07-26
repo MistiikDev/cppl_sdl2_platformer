@@ -16,6 +16,10 @@ void TextureManager::Init(SDL_Renderer* rendererPtr) {
         return;
     }
 
+    const char* best = new char ('1');
+
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, best);
+
     std::cout << "TEXTURE : SDL_image / Texture Manager initialized " << std::endl;
 }
 
@@ -41,6 +45,8 @@ std::shared_ptr<SDL_Texture> TextureManager::LoadTexture(const std::string& Text
         std::cerr << "TEXTURE : Texture Loading Failed: " << IMG_GetError() << std::endl;
         return nullptr;
     }
+
+    SDL_SetTextureScaleMode(texture, SDL_ScaleModeBest);
 
     TextureManager::textures[TexturePath] = std::shared_ptr<SDL_Texture>(texture, SDL_DestroyTexture);;
 

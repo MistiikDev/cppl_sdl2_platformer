@@ -53,7 +53,7 @@ class Entity {
         void SetRotation(int Rotation) { this->Rotation = Rotation; };
 
         void Push(Vec2f& push_vector, float speed = 0.1f);
-
+        
         int GetRotation() { return Rotation; };
         Vec2f& GetPosition() { return Position; };
         Vec2f& GetVelocity() { return Velocity ;};

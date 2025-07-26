@@ -13,12 +13,19 @@ class Camera {
     public:
         Camera(int w, int h);
 
+        bool isFocusing;
+        bool isFollowing;
+        
+        double Depth;
+
         Vec2f Position;
         Vec2f ViewportSize;
         Vec2f Target;
 
-        void Follow(Vec2f& targetPosition);
+        void Focus(bool isFocusing);
         
+        void Follow(Vec2f& targetPosition);
+        Vec2f ScaleToZoom(Vec2f& size);
         Vec2f WorldToScreen(Vec2f& WorldPosition);
         Vec2f ScreenToWorldPosition(Vec2f& ScreenPosition);
     private: 

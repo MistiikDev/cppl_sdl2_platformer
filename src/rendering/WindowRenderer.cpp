@@ -47,16 +47,31 @@ void WindowRenderer::Render(std::vector<std::shared_ptr<Entity>>& activeEntities
 
         // Destination, where are we drawing on the screen?
 
+        // The textures are not repositioned accordingly, they overlap after the resize.
+        Vec2f renderPos;
+        Vec2f renderSize;
+
         if (e->fixedToCamera) {
-            destRect.x = static_cast<int>(e->GetPosition().x);
-            destRect.y = static_cast<int>(e->GetPosition().y);
+            renderPos = e->GetPosition();
+            renderSize = Vec2f{
+                static_cast<double>(e->GetEntityRenderingBox().w),
+                static_cast<double>(e->GetEntityRenderingBox().h)
+            };
         } else {
-            destRect.x = static_cast<int>(camera->WorldToScreen(e->GetPosition()).x);
-            destRect.y = static_cast<int>(camera->WorldToScreen(e->GetPosition()).y);
+            Vec2f textureSize = Vec2f {
+                static_cast<double>(e->GetEntityRenderingBox().w),
+                static_cast<double>(e->GetEntityRenderingBox().h)
+            };
+
+            renderPos = camera->WorldToScreen(e->GetPosition());
+            renderSize = camera->ScaleToZoom(textureSize);
         }
 
-        destRect.w = e->GetEntityRenderingBox().w;
-        destRect.h = e->GetEntityRenderingBox().h;
+        destRect.x = renderPos.x;
+        destRect.y = renderPos.y;
+        
+        destRect.w = renderSize.x;
+        destRect.h = renderSize.y;
 
         SDL_Texture* entityTexture = e->GetTexture().get();
         

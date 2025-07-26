@@ -55,6 +55,6 @@ void ChunkManager::UpdateTerrain(EntityManager* entityLoader, const Vec2f& playe
     for (int chunkID : chunksToLoad) {
         Chunks[chunkID]->Load(entityLoader);
         
-        std::cout << "LOADDED chunk " << chunkID << "\n";
+        std::cout << "LOADED chunk " << chunkID << "\n";
     }
 }

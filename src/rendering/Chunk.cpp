@@ -139,16 +139,16 @@ void Chunk::Load(EntityManager* entityManager) {
                 }
             }
 
-            this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);
-            // if (this->renderedBlocks[localBlockData.ID]) {
-            //     //std::cout << "CHUNK LOADING: Culling Block" << std::endl;
+            //this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);
+            if (this->renderedBlocks[localBlockData.ID]) {
+                //std::cout << "CHUNK LOADING: Culling Block" << std::endl;
                 
-            //     this->renderedBlocks[localBlockData.ID]->isActive = true;
-            // } else {
-            //     //std::cout << "CHUNK LOADING: Creating Block" << std::endl;
+                this->renderedBlocks[localBlockData.ID]->isActive = true;
+            } else {
+                //std::cout << "CHUNK LOADING: Creating Block" << std::endl;
                 
-            //     this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);;
-            // }
+                this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);;
+            }
 
             y += BLOCK_SIZE;
         }
@@ -166,7 +166,7 @@ void Chunk::UnloadEntities(EntityManager* entityManager) {
 
         entityManager->ClearEntity(block); 
 
-        //block->isActive = false;
+        block->isActive = false;
     }
 
     this->isLoaded = false;

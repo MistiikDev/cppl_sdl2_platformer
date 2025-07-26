@@ -27,7 +27,7 @@ extern int chunkHeigth;
 
 struct Chunk {
     int seed;
-    float chunkSmoothness = 0.003f;
+    float chunkSmoothness = 0.0025f;
     bool isLoaded = false;
     bool isGenerated = false;
 
