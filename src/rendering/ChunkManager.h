@@ -4,7 +4,7 @@
 #include <iostream>
 #include <map>
 
-#define CHUNK_RENDER_DISTANCE 1
+#define CHUNK_RENDER_DISTANCE 2
 
 class Chunk;
 class ChunkManager {

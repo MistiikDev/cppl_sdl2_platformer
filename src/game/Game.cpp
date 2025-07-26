@@ -24,6 +24,7 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
     );
     
     assert(activeWindow != NULL && "Error while creating window!");
+
     this->Running = true;
     this->Window = activeWindow;
     this->AppRenderer = new WindowRenderer { this->Window, SDL_RENDERER_ACCELERATED, LOGICAL_WIDTH, LOGICAL_HEIGTH };
@@ -38,12 +39,14 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
 
     AnimationLoader::LoadAnimDefinitions("src/assets/data/entity_animations.json");
     AudioManager::PreloadAudioFiles("src/assets/data/sound.json");
+
+    this->currentCamera = new Camera { LOGICAL_WIDTH, LOGICAL_HEIGTH };
+
     this->entityManager = new EntityManager { this };
-
     this->levelManager = new LevelManager { this->entityManager };
-    this->levelManager->LoadLevel("level1");
-
     this->_InputManager = new InputManager { };
+
+    this->levelManager->LoadLevel("level1");
 
     //
     this->Run();
@@ -69,15 +72,6 @@ void Game::Run() {
                     this->Running = false;
                     this->Stop();
                     break;
-                case SDL_WINDOWEVENT_RESIZED: {
-                    // int newWidth = this->AppEventPoll.window.data1;
-                    // int newHeight = this->AppEventPoll.window.data2;
-
-                    // std::cout << "Window resized to: " << newWidth << "x" << newHeight << std::endl;
-
-                    // AppRenderer->SetViewportSize(newWidth, newHeight);
-                    break;
-                }
                 default:
                     break;
             }
@@ -87,13 +81,17 @@ void Game::Run() {
         this->AppRenderer->ClearViewport();
         this->entityManager->UpdateEntities(this->DeltaTime);
 
-        this->AppRenderer->Render(this->entityManager->GetActiveEntities());
+        this->AppRenderer->Render(this->entityManager->GetActiveEntities(), this->currentCamera);
         this->AppRenderer->Display();
 
         this->levelManager->UpdateTerrain();
 
         SDL_Delay((Uint32)(1000.0f / 144.0f)); // Cap at 144Hz
     }
+}
+
+void Game::SetCameraTarget(Vec2f& target) {
+    this->currentCamera->Follow(target);
 }
 
 void Game::GetLogicalWindowSize(int& w, int& h) {

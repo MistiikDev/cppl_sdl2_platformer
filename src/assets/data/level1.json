@@ -13,7 +13,7 @@
                 "TexturePath": "src/assets/art/background/day_background.jpg",
                 "RenderingGroup": "",
                 "RenderLayer": -1,
-                "isScrollable": false
+                "fixedToCamera": true
             },
             {
                 "Name": "Player1",
@@ -26,7 +26,7 @@
                 "TexturePath": "src/assets/art/sprites/player/player_sprite_sized.png",
                 "RenderingGroup": "",
                 "RenderLayer": 1,
-                "isScrollable": false
+                "fixedToCamera": false
             }
         ],
         

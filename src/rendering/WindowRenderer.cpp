@@ -1,4 +1,6 @@
 #include "Entity.h"
+#include "Camera.h"
+
 #include "WindowRenderer.h"
 
 WindowRenderer::WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag, int Width, int Height) {
@@ -25,7 +27,7 @@ void WindowRenderer::Display() {
     SDL_RenderPresent(this->activeRenderer);
 }
 
-void WindowRenderer::Render(std::vector<std::shared_ptr<Entity>>& activeEntities) {
+void WindowRenderer::Render(std::vector<std::shared_ptr<Entity>>& activeEntities, Camera* camera) {
 
     // Sort list based off of render layers.
     std::sort(activeEntities.begin(), activeEntities.end(), 
@@ -35,7 +37,6 @@ void WindowRenderer::Render(std::vector<std::shared_ptr<Entity>>& activeEntities
     );
 
      for (const auto& e : activeEntities) {
-        if (!e->isActive) continue;
 
         SDL_Rect sourceRect, destRect;
         // Source, what pixels are we drawing?
@@ -45,8 +46,15 @@ void WindowRenderer::Render(std::vector<std::shared_ptr<Entity>>& activeEntities
         sourceRect.h = e->GetEntityRenderingBox().h;
 
         // Destination, where are we drawing on the screen?
-        destRect.x = static_cast<int>(e->GetPosition().x);
-        destRect.y = static_cast<int>(e->GetPosition().y);
+
+        if (e->fixedToCamera) {
+            destRect.x = static_cast<int>(e->GetPosition().x);
+            destRect.y = static_cast<int>(e->GetPosition().y);
+        } else {
+            destRect.x = static_cast<int>(camera->WorldToScreen(e->GetPosition()).x);
+            destRect.y = static_cast<int>(camera->WorldToScreen(e->GetPosition()).y);
+        }
+
         destRect.w = e->GetEntityRenderingBox().w;
         destRect.h = e->GetEntityRenderingBox().h;
 

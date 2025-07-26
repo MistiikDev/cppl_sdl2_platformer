@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 Animator::Animator(Entity* e) {
-    std::cout << "ANIMATOR : Created Animator for : " << e->Name << std::endl;
+    //std::cout << "ANIMATOR : Created Animator for : " << e->Name << std::endl;
     target = e;
 }
 

@@ -80,12 +80,10 @@ bool LevelManager::LoadLevel(const std::string& levelName) {
         entity.Anchored = e["Anchored"];
         entity.CanCollide = e["CanCollide"];
         entity.TexturePath = e["TexturePath"];
-        entity.isScrollable = e["isScrollable"];
+        entity.fixedToCamera = e["fixedToCamera"];
 
         entity.RenderingGroup = e["RenderingGroup"];
         entity.RenderingLayer = e.value("RenderLayer", 0);
-
-        std::cout << "LEVEL: Entity is : " << (entity.isScrollable ? "SCROLLABLE" : "NOT SCROLLABLE") << std::endl;
 
         CurrentLevel.Entities.push_back(entity);
 

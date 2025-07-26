@@ -23,9 +23,6 @@ class EntityManager {
 
         void UpdateEntities(float deltaTime);
         void ClearEntity(std::shared_ptr<Entity>& entity);
-        
-        void LoadEntity(EntityData& entityData);
-        void UnloadEntity(EntityData& entityData);
 
         void ClearEntities();
         void Quit();

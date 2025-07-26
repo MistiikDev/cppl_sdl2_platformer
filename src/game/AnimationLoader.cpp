@@ -15,7 +15,7 @@ void AnimationLoader::Init(SDL_Renderer* Renderer) {
 }
 
 void AnimationLoader::LoadAnimDefinitions(const std::string &path) {
-    std::cout << "ANIMATION : Loading animation data from : " << path << std::endl;
+    //std::cout << "ANIMATION : Loading animation data from : " << path << std::endl;
 
     std::ifstream file(path);
     nlohmann::json j;
@@ -50,7 +50,7 @@ std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(const A
     {
         std::shared_ptr<SDL_Texture> frame_texture = TextureManager::LoadTexture(path.c_str());
 
-        std::cout << "ANIMATION : Loading frame : " << path.c_str() << std::endl;
+        //std::cout << "ANIMATION : Loading frame : " << path.c_str() << std::endl;
 
         if (!frame_texture)
         {
@@ -61,7 +61,7 @@ std::unique_ptr<AnimationTrack> AnimationLoader::LoadTrackFromDefinition(const A
         track->frames.push_back(frame_texture);
     }
 
-    std::cout << "ANIMATION : Done loading animation track : " << track->animation.Name << std::endl;
+    //std::cout << "ANIMATION : Done loading animation track : " << track->animation.Name << std::endl;
 
     return track;
 }

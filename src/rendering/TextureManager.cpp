@@ -20,7 +20,7 @@ void TextureManager::Init(SDL_Renderer* rendererPtr) {
 }
 
 std::shared_ptr<SDL_Texture> TextureManager::LoadTexture(const std::string& TexturePath) {
-    std::cout << "TEXTURE : Loading Texture : " << TexturePath << std::endl;
+    //std::cout << "TEXTURE : Loading Texture : " << TexturePath << std::endl;
     
     if (TextureManager::Renderer == nullptr) {
         std::cerr << "[ERR] TEXTURE : Renderer PTR is NULL!" << std::endl;
@@ -31,7 +31,7 @@ std::shared_ptr<SDL_Texture> TextureManager::LoadTexture(const std::string& Text
     auto it = textures.find(TexturePath);
 
     if (it != textures.end()) {
-        std::cout << "TEXTURE : Culling texture from cache.." << std::endl;
+        //std::cout << "TEXTURE : Culling texture from cache.." << std::endl;
         return it->second;
     }
 
@@ -44,7 +44,7 @@ std::shared_ptr<SDL_Texture> TextureManager::LoadTexture(const std::string& Text
 
     TextureManager::textures[TexturePath] = std::shared_ptr<SDL_Texture>(texture, SDL_DestroyTexture);;
 
-    std::cout << "TEXTURE : Loaded texture : " << TexturePath << std::endl;
+    //std::cout << "TEXTURE : Loaded texture : " << TexturePath << std::endl;
 
     return TextureManager::textures[TexturePath];
 }

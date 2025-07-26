@@ -14,7 +14,7 @@ struct EntityData {
     double Mass;
     bool Anchored;
     bool CanCollide;
-    bool isScrollable;
+    bool fixedToCamera;
     bool Passive;
 
     std::string TexturePath;

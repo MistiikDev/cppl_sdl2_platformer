@@ -1,4 +1,5 @@
 #include "EntityManager.h"
+#include "Game.h"
 
 EntityManager::EntityManager(Game* currentGameInstance) {
     this->currentGameInstance = currentGameInstance;
@@ -25,6 +26,8 @@ std::shared_ptr<Player> EntityManager::CreatePlayer(EntityData& entityData) {
         return nullptr;
     }
 
+    // By default, camera subject
+
     std::shared_ptr<SDL_Texture> player_texture = TextureManager::LoadTexture(entityData.TexturePath);
     std::shared_ptr<Player> player_ptr = std::make_shared<Player>(
         currentGameInstance, 
@@ -34,19 +37,14 @@ std::shared_ptr<Player> EntityManager::CreatePlayer(EntityData& entityData) {
 
     player_ptr->Awake();
     activeEntities.push_back(player_ptr);
-
     this->localPlayer = player_ptr;
 
     return player_ptr;
 };
 
 void EntityManager::UpdateEntities(float deltaTime) {
-    Vec2f playerPrevPos;
-    Vec2f playerNewPos;
-
-    if (this->localPlayer != nullptr) {
-        playerPrevPos = this->localPlayer->GetPosition();
-    }
+    // Vec2f playerPrevPos;
+    // Vec2f playerNewPos;
 
     for (auto& entity : this->activeEntities) {
         Entity* e = entity.get();
@@ -61,25 +59,29 @@ void EntityManager::UpdateEntities(float deltaTime) {
     Physics::CheckEntityCollisions(this->activeEntities);
 
     if (this->localPlayer != nullptr) {
-        playerNewPos = this->localPlayer->GetPosition();
-
-        Vec2f displacement = playerNewPos - playerPrevPos;
-        this->localPlayer->RealWorldPosition = this->localPlayer->RealWorldPosition + displacement;
-
-        playerPrevPos.y = playerNewPos.y; // Let the player update its y position (jumps...)
-        displacement.y = 0; // Lock player X-Axis
-        
-        this->localPlayer->SetPosition(playerPrevPos, false);
-
-        for (auto& entity : this->activeEntities) {
-            Entity* e = entity.get();
-            if (e == this->localPlayer.get() || !e->isScrollable) continue;
-
-            Vec2f centeredOffsetPosition = e->GetPosition() - (displacement); // Offset every other entity by the opposite of deltaPlayer displacement
-            
-            e->SetPosition(centeredOffsetPosition, false);
-        }
+        this->currentGameInstance->SetCameraTarget(this->localPlayer->GetPosition());
     }
+
+    // if (this->localPlayer != nullptr) {
+    //     playerNewPos = this->localPlayer->GetPosition();
+
+    //     Vec2f displacement = playerNewPos - playerPrevPos;
+    //     this->localPlayer->RealWorldPosition = this->localPlayer->RealWorldPosition + displacement;
+
+    //     playerPrevPos.y = playerNewPos.y; // Let the player update its y position (jumps...)
+    //     displacement.y = 0; // Lock player X-Axis
+        
+    //     this->localPlayer->SetPosition(playerPrevPos, false);
+
+    //     for (auto& entity : this->activeEntities) {
+    //         Entity* e = entity.get();
+    //         if (e == this->localPlayer.get() || !e->isScrollable) continue;
+
+    //         Vec2f centeredOffsetPosition = e->GetPosition() - (displacement); // Offset every other entity by the opposite of deltaPlayer displacement
+            
+    //         e->SetPosition(centeredOffsetPosition, false);
+    //     }
+    // }
 }
 
 
@@ -92,7 +94,7 @@ void EntityManager::ClearEntity(std::shared_ptr<Entity>& entity) {
     }
 
     this->activeEntities.erase(it);
-    std::cout << "ENTITY MANAGER : Successfully deleted Entity @ " << entity << std::endl;
+    //std::cout << "ENTITY MANAGER : Successfully deleted Entity @ " << entity << std::endl;
 }
 
 void EntityManager::ClearEntities() {

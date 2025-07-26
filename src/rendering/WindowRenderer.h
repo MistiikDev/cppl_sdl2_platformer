@@ -9,6 +9,7 @@
 #include "EntityManager.h"
 
 class Entity;
+class Camera;
 class WindowRenderer {
     public:
         WindowRenderer(SDL_Window* window, SDL_RendererFlags renderFlag, int Width, int Height);
@@ -19,7 +20,7 @@ class WindowRenderer {
         SDL_Renderer* GetRenderer();
 
         void Display();
-        void Render(std::vector<std::shared_ptr<Entity>>& renderObjects);
+        void Render(std::vector<std::shared_ptr<Entity>>& renderObjects, Camera* camera);
         void ClearViewport();
 
         void SetViewportSize(int newWidth, int newHeight);

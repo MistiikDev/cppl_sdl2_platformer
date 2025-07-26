@@ -26,6 +26,8 @@ class PhysicsRenderer;
 class LevelManager;
 class EntityManager;
 
+class Camera;
+
 class Game {
     public: 
         Game( const char* GameTitle ): WindowTitle(GameTitle) {};
@@ -43,8 +45,12 @@ class Game {
             return Window;
         }
 
+        void SetCameraTarget(Vec2f& target);
+
         Vec2f MidScreenLoc { WIDTH / 2, HEIGTH / 2 };
         Vec2f GroundScreenLoc = MidScreenLoc - Vec2f {300, -160};
+
+        Camera* currentCamera;
 
         WindowRenderer* AppRenderer;
         InputManager* _InputManager;

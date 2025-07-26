@@ -1,39 +1,48 @@
 #include "Chunk.h"
 
-#define PRELOAD_BUFFER 1 // Number of chunks between loads, preload chunks BEFORE entering it.
-
 int chunkWidth = CHUNK_SIZE_X * BLOCK_SIZE;
 int chunkHeigth = CHUNK_SIZE_Y * BLOCK_SIZE;
 
 bool Chunk::isVisibleToPlayer(Vec2f& playerPosition) {
-    int chunkStartX = this->Position.x;
-    int chunkEndX = chunkStartX + chunkWidth;
+    double halfScreen = 1920 / 2.0;
+    double bufferSize = 2 * chunkWidth;
 
-    return ((playerPosition.x >= (chunkStartX - (PRELOAD_BUFFER * chunkWidth))) && (playerPosition.x <= (chunkEndX + (PRELOAD_BUFFER * chunkWidth))));
+    double visibleStart = playerPosition.x - halfScreen - bufferSize;
+    double visibleEnd   = playerPosition.x + halfScreen + bufferSize;
+
+    int chunkStartX = static_cast<int>(this->Position.x);
+    int chunkEndX   = chunkStartX + chunkWidth;
+
+    // Check if the chunk overlaps with the visible + buffer zone
+    return (chunkEndX >= visibleStart && chunkStartX <= visibleEnd);
+}
+
+void Chunk::SetSeed(int seed) {
+    this->seed = seed;
 }
 
 void Chunk::Generate() {
     // Init noise
-
     if (isGenerated) return;
+    
+    float HeigthAmplitude = (WORLD_HEIGHT_MAX - WORLD_HEIGHT_MIN) / 2;
 
     this->defaultBlockData.Anchored = true;
     this->defaultBlockData.CanCollide = true;
     this->defaultBlockData.Passive = true;
-    this->defaultBlockData.isScrollable = true;
+    this->defaultBlockData.fixedToCamera = false;
     
     this->defaultBlockData.Class = "WorldBlock";
     this->defaultBlockData.Name = "Block";
 
-    float HeigthAmplitude = (WORLD_HEIGHT_MAX - WORLD_HEIGHT_MIN) / 2;
-
     this->chunkNoise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
     this->chunkNoise.SetFrequency(this->chunkSmoothness);
-    this->chunkNoise.SetSeed(static_cast<int>(time(NULL)));
+    this->chunkNoise.SetSeed(this->seed);
 
     for (int x = 0; x < chunkWidth; x += BLOCK_SIZE) {
-        int worldX = this->Position.x + x;
-        float x_float = static_cast<float>(worldX);
+        int worldBlockX = static_cast<int>(this->Position.x + x);
+
+        float x_float = static_cast<float>(worldBlockX);
         float localNoise = this->chunkNoise.GetNoise(x_float, 0.0f);
 
         float localNoiseNormal = (localNoise + 1.0f) / 2.0f;
@@ -53,6 +62,7 @@ void Chunk::Generate() {
 
         for (int y = height; y < chunkHeigth; y += BLOCK_SIZE) {
             BlockType block;
+
             if (blockDepth == 0)
                 block = BlockType::Grass;
             else if (blockDepth <= MINIMUM_DIRT_DEPTH + (rand() % 3))
@@ -64,7 +74,7 @@ void Chunk::Generate() {
             blockDepth++;
         }
 
-        this->chunkData[worldX] = y_depth;
+        this->chunkData[worldBlockX] = y_depth;
     }
 
     this->isGenerated = true;
@@ -84,13 +94,19 @@ uint64_t pair(int a, int b) {
 void Chunk::Load(EntityManager* entityManager) {
     if (this->isLoaded) return;
     if (!this->isGenerated) this->Generate();
-
-    for (auto coordinateData : this->chunkData) {
-        int x = coordinateData.first;
+    
+    for (auto& [x, y_depth] : this->chunkData) {
         int y = 0;
 
-        for (int block_type : coordinateData.second) {
+        for (int block_type : y_depth) {
             EntityData localBlockData = this->defaultBlockData;
+
+            localBlockData.Anchored = true;
+            localBlockData.Passive = true;
+            localBlockData.fixedToCamera = false;
+            
+            localBlockData.Class = "WorldBlock";
+            localBlockData.Name = "Block";
 
             localBlockData.ID = pair(x, y);
             localBlockData.Position = Vec2f{static_cast<double>(x), static_cast<double>(y)};
@@ -116,20 +132,23 @@ void Chunk::Load(EntityManager* entityManager) {
                     localBlockData.TexturePath = "src/assets/art/blocs/stone.png";
                     break;
                 }
+
+                default: {
+                    localBlockData.TexturePath = "src/assets/art/blocs/debug.png";
+                    break;
+                }
             }
 
-            std::cout << "CHUNK LOADING: Rendering Block (ID : " << localBlockData.ID << ") @ :";
-            localBlockData.Position.print();
-            
-            if (this->renderedBlocks[localBlockData.ID]) {
-                //std::cout << "CHUNK LOADING: Culling Block" << std::endl;
+            this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);
+            // if (this->renderedBlocks[localBlockData.ID]) {
+            //     //std::cout << "CHUNK LOADING: Culling Block" << std::endl;
                 
-                this->renderedBlocks[localBlockData.ID]->isActive = true;
-            } else {
-                //std::cout << "CHUNK LOADING: Creating Block" << std::endl;
+            //     this->renderedBlocks[localBlockData.ID]->isActive = true;
+            // } else {
+            //     //std::cout << "CHUNK LOADING: Creating Block" << std::endl;
                 
-                this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);;
-            }
+            //     this->renderedBlocks[localBlockData.ID] = entityManager->CreateEntity(localBlockData);;
+            // }
 
             y += BLOCK_SIZE;
         }
@@ -145,7 +164,9 @@ void Chunk::UnloadEntities(EntityManager* entityManager) {
         uint64_t blockID = data.first;
         std::shared_ptr<Entity> block = data.second;
 
-        block->isActive = false;
+        entityManager->ClearEntity(block); 
+
+        //block->isActive = false;
     }
 
     this->isLoaded = false;

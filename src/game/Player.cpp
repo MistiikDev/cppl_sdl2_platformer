@@ -6,9 +6,9 @@ void Player::RegisterPlayerInput(Sint32 keyCode, Uint8 inputState) {
 }
 
 void Player::Awake() {
-    this->isPassive = false;
-
     Entity::Awake();
+
+    this->isPassive = false;
 
     std::string PLAYER_INPUT_REG_ID = "PLAYER_INPUT_REG";
     InputManager::UserInput.Subscribe(PLAYER_INPUT_REG_ID, [this](Sint32 key, Uint8 state) {

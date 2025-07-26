@@ -13,7 +13,7 @@ Entity::Entity(Game *game, const EntityData &data, std::shared_ptr<SDL_Texture> 
     CanCollide(data.CanCollide),
     Name(data.Name),
     isPassive(data.Passive),
-    isScrollable(data.isScrollable)
+    fixedToCamera(data.fixedToCamera)
 {
     BoundingBox.x = 0;
     BoundingBox.y = 0;
@@ -29,7 +29,7 @@ Entity::Entity(Game *game, const EntityData &data, std::shared_ptr<SDL_Texture> 
     DirectionFacing = SDL_FLIP_NONE;
     ClassName = (ClassName.empty() ? ClassName : "Generic_Entity");
 
-    std::cout << "ENTITY : Loaded Entity : '" << this->Name << "' with ID : " << this->ID << std::endl;
+    //std::cout << "ENTITY : Loaded Entity : '" << this->Name << "' with ID : " << this->ID << std::endl;
 };
 
 void Entity::Awake()
@@ -38,7 +38,7 @@ void Entity::Awake()
    
     auto it = AnimationLoader::AnimationPackage.find(this->ClassName);
     if (it == AnimationLoader::AnimationPackage.end()) {
-        std::cerr << "No animation package found for class: " << this->ClassName << std::endl;
+        //std::cerr << "No animation package found for class: " << this->ClassName << std::endl;
         return;
     }
     
@@ -61,8 +61,8 @@ void Entity::SetPosition(Vec2f &newposition, bool stayInBounds = true)
 
     // new position.coord = clamp(0, screen_width - player_width, coord); -> screen_width - player_width = account for texture thickness!
 
-    newposition.x = (stayInBounds ? std::max(0.0, std::min((double)(screen_w - w), newposition.x)) : newposition.x);
-    newposition.y = (stayInBounds ? std::max(0.0, std::min((double)(screen_h - h), newposition.y)) : newposition.y);
+    // newposition.x = (stayInBounds ? std::max(0.0, std::min((double)(screen_w - w), newposition.x)) : newposition.x);
+    // newposition.y = (stayInBounds ? std::max(0.0, std::min((double)(screen_h - h), newposition.y)) : newposition.y);
 
     this->Position = newposition;
 }
