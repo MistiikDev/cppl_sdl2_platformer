@@ -33,6 +33,8 @@ class Game {
         Game( const char* GameTitle ): WindowTitle(GameTitle) {};
         ~Game() {};
         
+        const double TICK_THRESHOLD_LIMIT = 0.015;
+
         bool Running = false;
         const char* WindowTitle;
         float DeltaTime = 0.0f;
@@ -57,6 +59,10 @@ class Game {
         LevelManager* levelManager;
         EntityManager* entityManager;
     private:
+        Uint64 lastFrame;
+        Uint64 currentFrame;
+
+        double tickCounter;
         void Run();
 
         SDL_Window* Window;

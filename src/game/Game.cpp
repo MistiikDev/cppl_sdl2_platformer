@@ -53,15 +53,23 @@ void Game::Start(const SDL_WindowFlags windowFlag) {
 }
 
 void Game::Run() {
-    Uint64 now = SDL_GetPerformanceCounter();
-    Uint64 last = now;
-
     double freq = (double)SDL_GetPerformanceFrequency();
-    while (this->Running) {
-            now = SDL_GetPerformanceCounter();
-            this->DeltaTime = (double)(now - last) / freq; // Seconds
 
-            last = now;
+    this->currentFrame = SDL_GetPerformanceCounter();
+    this->lastFrame = this->currentFrame;
+
+    while (this->Running) {
+        this->currentFrame = SDL_GetPerformanceCounter();
+        
+        if (this->tickCounter < TICK_THRESHOLD_LIMIT) {
+            this->tickCounter += (double)(this->currentFrame - this->lastFrame);
+            continue;
+        }
+
+        this->DeltaTime = (double)(this->currentFrame - this->lastFrame) / freq;
+        this->tickCounter = 0;
+
+        this->lastFrame = this->currentFrame;
 
         // Handle events
         while (SDL_PollEvent(&this->AppEventPoll)) {
